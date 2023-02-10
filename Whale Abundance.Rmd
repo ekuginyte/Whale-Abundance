@@ -1,5 +1,5 @@
 ---
-title: "MT5751: Distance Sampling Project"
+title: "MT5751: Distance Sampling Project. Bowhead Whales"
 author: "Group K"
 date: "`r Sys.Date()`"
 output:
@@ -10,22 +10,19 @@ fontsize: 12pt
 
 \begin{center}
 
-xxx, 180015716, 220013309
+Student numbers xxx, 180015716, 220013309
 
 \end{center}
 \
 
-```{r Libraries and Logo, fig.align='center', message=FALSE, echo = FALSE, warning=FALSE, echox=FALSE, out.width='0.50\\linewidth'}
+```{r Libraries and Logo, fig.align="center", message=FALSE, echo = FALSE, warning=FALSE, echox=FALSE, out.width="0.50\\linewidth"}
 library(tidyverse)
 library(knitr)
-include_graphics("STA.png")
+include_graphics("Subject.png")
+include_graphics("logo.png")
 ```
 
 \newpage 
-
-\tableofcontents 
-
-\newpage
 
 ### Abstract
 
@@ -34,6 +31,26 @@ include_graphics("STA.png")
 ### Methods
 
 **Data Collection**
+To observe bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N,  largely covering the area of the local spring aggregation in Disko Bay. The study region on 242,650km^2^ was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7,836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). The angles were then converted to perpendicular distances ($x$) using the following equation from Buckland et al. (2001):
+
+$x = v * tan(90 - \psi )$,
+
+where $v$ is the altitude of the airplane, $\psi$ is the declination angle. Forward distance ($y$) to each sighting was calculated based on time of first sighting, time when passing abeam and speed of aircraft. For a more extensive description of the data collection refer to Rekdal et al. (2015).
+
+**Distance Sampling**
+To estimate the abundance of bowhead whales, a sample representative portion of the area, i.e. the plot distance sampling, is used. Distance sampling is used in ecological surveys to account for imperfect detections and is incredibly useful considering limited resources. The bowhead whales further away are less likely to be detected, thus distance is employed as a detection bias. The detection function describes how detectability varies with distance, it includes the proportion of animals seen at a given distance and a probability of seeing an animal at a given distance.
+To employ the distance sampling, first of the assumptions need to be met:
+- the transect lines were placed at random and the bowhead whales were not affected by their placement; 
+- animals on the transect line, in this case from distance from the plane of XX were seen with probability p = 1; 
+- perpendicular distances from line to bowhead whales are uniform random variables π(x) = 1/w;
+- distances were measured without error and to the initial location.
+
+To then define the detection function $g(x)$, with the assumptions stated above fulfilled, the key functions are fitted to the model:
+- Half-normal $g(x) = exp(- x^2^ / 2\sigma^2^)$
+- Hazard-rate $g(x) = exp(-(x / \sigma)^-b^)$,
+
+where $\sigma$ is a scale parameter (“standard deviation”) and $b$ controls the width of the shoulder.
+
 
 **Data Analysis**
 \
@@ -41,42 +58,40 @@ Due to an obscured view close to the transect line, detections were left-truncat
 \
 8 models were fit to the distance data using all combinations of hazard-rate and half-normal detection functions with cosine, hermite polynomial and simple polynomial adjustments. Model selection using Akaike information criterion (AIC) found that the best model was a half-normal with no adjustments (see figure 1). AICc was also applied due to the ratio of model parameters to observation being less than 1:40 and found the same result (Takezawa, 2014). This model had an good fit; Cramer-von Mises test (T = 0.073, p = 0.732), bootstrap Kolmogorov-Smirnov test for goodness-of-fit (D = 0.073, p = 1). Additionally a QQ-plot comparing empirical and fitted CDF had points lying approximately on the 1:1 line (see figure 1).
 
-```{r, Model Fit Plot, echo = FALSE, warning = FALSE, results = 'hide', message = FALSE}
-
-# Set up packages 
+```{r, Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
+# Set up libraries 
 library(Distance)
 library(tidyverse)
 library(remotes)
 
 # Getting Package Statsecol from github which contains the data
 remotes::install_github("https://github.com/chrissuthy/statsecol")
-
 # Loading in the data package
 library(statsecol)
-# Half-normal with no adjustment 
+
+# Distance model with half-normal key function, no adjustment 
 hn <- ds(data = bowhead_LT, 
-         key = 'hn', 
-         adjustment = NULL ) 
+         key = "hn", 
+         adjustment = NULL) 
 
 # Setting plot size
-par(mfrow=c(1,2), mar = c(5, 4, 4, 2) + 0.1, oma=c(2, 3, 5, 2))
+par(mfrow = c(1,2), mar = c(5, 4, 4, 2) + 0.1, oma = c(2, 3, 5, 2))
 
 # Plotting the detection function over the distances distribution
 plot(hn, 
-     which=2, 
+     which = 2, 
      pl.col = adjustcolor("seagreen",0.5), 
      border = NULL,
      ylab = "Detection probability (g(x))", 
      xlab = "Distance", 
-     las=1,
+     las = 1,
      main = "A")
 
 # Plotting and running the Cramer-von Mises test
+gof_ds(hn, main = "B")
+subtitle = ("Figure 1: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF")
 
-gof_ds(hn, main = 'B')
-subtitle = ('Figure 1: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF')
-
-mtext(side=1, adj=0, cex=0.7, subtitle, outer = TRUE)
+mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 
 ``` 
 
@@ -97,63 +112,65 @@ library(Distance)
 library(tidyverse)
 library(remotes)
 
-
 # Getting Package Statsecol from github which contains the data
 remotes::install_github("https://github.com/chrissuthy/statsecol")
 
 # Loading in the data package
 library(statsecol)
-
 ```
 
 ```{r Exploratory Analysis, echo = FALSE}
 #####    EXPLORATORY ANALYSIS    #####
 
-# look at data columns
+# Inspect data
 str(bowhead_LT)
 
 # Looking at the distribution of the distances
-
-
-par(mfrow=c(1,1), 
-    mar = c(5, 4, 4, 2) + 0.1) # Setting up the plot size
-hist(bowhead_LT$distance, 
-     xlab="Distance (km)",  # Naming x-axis
-     ylab = 'Number of Bowhead Whales',  # Naming y axis
-     main = "Distances of Bowhead Whales from Line Transects", # Naming plot
-     col = adjustcolor("seagreen", 0.5), # Changing colour and intensity of bars
-     las = 1) # Changing orientation of x-axis tick labels
-
+# Setting up the plot size
+par(mfrow = c(1,1), 
+    mar = c(5, 4, 4, 2) + 0.1) 
+# Plot histogram of distances
+hist(bowhead_LT$distance,
+     # Naming x-axis
+     xlab = "Distance (km)",  
+     # Naming y axis
+     ylab = "Number of Bowhead Whales",  
+     # Naming plot
+     main = "Distances of Bowhead Whales from Line Transects", 
+      # Changing colour and intensity of bars
+     col = adjustcolor("seagreen", 0.5),
+     # Changing orientation of x-axis tick labels
+     las = 1) 
 ```
 
 ```{r Modelling, eval = FALSE}
 #####     MODELLING     #####
 
 # Due to the long shoulder seen in the histogram, first fit a hazard rate;
-    #then fit a half-normal
+#   then fit a half-normal
 
 
 # Fitting hazard-rate detection functions with all adjustment terms 
 
 # Hazard-rate with no adjustment 
 hr <- ds(data = bowhead_LT, 
-         key = 'hr', 
+         key = "hr", 
          adjustment = NULL ) 
 
 # Hazard-rate with a cosine adjustment 
 hr_cos <- ds(data = bowhead_LT, 
-             key = 'hr', 
-             adjustment = 'cos')
+             key = "hr", 
+             adjustment = "cos")
 
 # Hazard-rate with a hermite polynomial adjustment 
 hr_herm <- ds(data = bowhead_LT, 
-              key = 'hr', 
-              adjustment = 'herm' )
+              key = "hr", 
+              adjustment = "herm" )
 
 # Hazard-rate with a simple polynomial adjustment 
 hr_poly <- ds(data = bowhead_LT, 
-              key = 'hr', 
-              adjustment = 'poly' ) 
+              key = "hr", 
+              adjustment = "poly" ) 
 
 
 
@@ -161,23 +178,23 @@ hr_poly <- ds(data = bowhead_LT,
 
 # Half-normal with no adjustment 
 hn <- ds(data = bowhead_LT, 
-         key = 'hn', 
+         key = "hn", 
          adjustment = NULL ) 
 
 # Half-normal with a cosine adjustment
 hn_cos <- ds(data = bowhead_LT, 
-             key = 'hn', 
-             adjustment = 'cos' ) 
+             key = "hn", 
+             adjustment = "cos" ) 
 
 # Half-normal with a hermite polynomial adjustment
 hn_herm <- ds(data = bowhead_LT, 
-              key = 'hn', 
-              adjustment = 'herm' )
+              key = "hn", 
+              adjustment = "herm" )
 
 # Half-normal with a simple polynomial adjustment
 hn_poly <- ds(data = bowhead_LT, 
-              key = 'hn', 
-              adjustment = 'poly' )
+              key = "hn", 
+              adjustment = "poly" )
 ```
 
 ```{r Model Selection, eval = FALSE}
@@ -186,8 +203,9 @@ hn_poly <- ds(data = bowhead_LT,
 # Comparing Models graphically by fit of detection probability over distance distribution
 
 # Half-normal detection function over histogram plot
+# Setting up plot size and margins
 par(mfrow = c(2, 2), 
-    mar = c(5, 4, 4, 2) + 0.1) # Setting up plot size and margins
+    mar = c(5, 4, 4, 2) + 0.1) 
 
 # Plotting all 4 half-normal models
 plot(hn, main = "no adjustment") 
@@ -196,12 +214,14 @@ plot(hn_poly, main = "polynomial")
 plot(hn_herm, main = "hermite polynomial")
 title("Half-Normal Models", 
       line = -1, 
-      outer = TRUE) # Naming title and setting location
+      # Naming title and setting location
+      outer = TRUE) 
 
 
 # Hazard-rate Detection function over histogram plot
 par(mfrow = c(2, 2), 
-    mar = c(5, 4, 4, 2) + 0.1) # Setting up plot size and margins
+    # Setting up plot size and margins
+    mar = c(5, 4, 4, 2) + 0.1) 
 
 # Plotting all 4 hazard-rate models
 plot(hr, main = "no adjustment")
@@ -210,25 +230,28 @@ plot(hr_poly, main = "polynomial")
 plot(hr_herm, main = "hermite polynomial")
 title("Hazard-Rate Models", 
       line = -1, 
-      outer = TRUE) # Naming title and setting location
+      # Naming title and setting location
+      outer = TRUE) 
 
 # Comparing AIC of all the models 
 summarize_ds_models(hn, hn_cos, hn_herm, hn_poly, 
                     hr, hr_cos, hr_herm, hr_poly,
-                    output = "plain") # Plain output works instead of equations
+                    # Plain output works instead of equations
+                    output = "plain") 
 
 # As the dataset is small, checking whether AICc is a more appropriate measure
 # To do this, Takezawa (2014) has said AICc should be used when the ratio of your parameters
-  # to number of data points is less than 1:40
-
+#   to number of data points is less than 1:40
+# Print summary of hazard-rate distance model
 summary(hr)
   # Parameters = 2 : Observations = 58
   # Therefore ratio is 1:29
-    # This ratio will be even smaller for the models with adjustments 
+  #   This ratio will be even smaller for the models with adjustments 
 
+# Print summary of half-normal distance model
 summary(hn)
   # This is the only model that meets the assumptions of AIC however as you 
-    # Can't compare across model selection parameters we will use AICc
+  #   Can"t compare across model selection parameters we will use AICc
 
 # Using AICc to select models 
 AICc(hn, hn_cos, hn_herm, hn_poly, 
@@ -237,8 +260,8 @@ AICc(hn, hn_cos, hn_herm, hn_poly,
 # Despite this there is no change in the best model
 
 # The half-normal will be chosen as it has the smallest AIC and AICc
-# No adjustment will be chosen as the adjustments don't model extra variability 
-   # in the data 
+# No adjustment will be chosen as the adjustments don"t model extra variability 
+#   in the data 
 ```
 
 ```{r Model Fit, eval = FALSE}
@@ -247,44 +270,51 @@ AICc(hn, hn_cos, hn_herm, hn_poly,
 # Comparing the detection function to the cramer-von mises test
 
 # Setting plot size
-par(mfrow=c(1,2), mar = c(5, 4, 4, 2) + 0.1)
+par(mfrow = c(1,2), mar = c(5, 4, 4, 2) + 0.1)
 
 # Plotting the detetion function over the distances distribution
 plot(hn, 
-     which=2, 
-     pl.col = adjustcolor("seagreen",0.5), 
+     which = 2, 
+     pl.col = adjustcolor("seagreen", 0.5), 
      border = NULL,
      ylab = "Detection probability (g(x))", 
      xlab = "Distance", 
-     las=1,
+     las = 1,
      main = "Half-normal Model No Adjustments")
 
-# Plotting and running the Cramer-von Mises test and bootstrap Kolmogorov-Smirnov      test for goodness-of-fit
+# Plotting and running the Cramer-von Mises test and bootstrap Kolmogorov-Smirnov      
+#   test for goodness-of-fit
 
-gof_ds(hn, main = 'Expected vs Observed CDF' , ks = TRUE)
+gof_ds(hn, main = "Expected vs Observed CDF", ks = TRUE)
 
-  # The Cramer-von Mises test gives a test statistic of 0.0732325 and a p-value of           0.731882
-  # The Kolomogorov-Smirnov test gives a test statistic stat of 0.0725551 and a             p-value of 1
+  # The Cramer-von Mises test gives a test statistic of 0.0732325 and a p-value 
+  #   of 0.731882
+  # The Kolomogorov-Smirnov test gives a test statistic stat of 0.0725551 and a             
+  #   p-value of 1
 
 # Therefore the model has a good fit as the p values are much more than 0.05
 ```
 
 ```{r Model Inference, eval = FALSE}
 #####     MODEL INFERENCE     #####
-# Looking at model 
+# Print summary of the model
 summary(hn)
 
-# creating subsets of the column combinations needed for dht()
-region_table <- unique(bowhead_LT[,c("Region.Label", 
-                                     "Area")])
+# Creating subsets of the column combinations needed for dht() density and 
+#   abundance estimate and variances function.
+# Region labels and areas. 
+region_table <- unique(bowhead_LT[, c("Region.Label", 
+                                      "Area")])
 
-sample_table <- unique(bowhead_LT[,c("Region.Label", 
-                                     "Sample.Label", 
-                                     "Effort")])
+# Region and sample labels, effort
+sample_table <- unique(bowhead_LT[, c("Region.Label", 
+                                      "Sample.Label", 
+                                      "Effort")])
 
-observation_table <- unique(bowhead_LT[,c("object", 
-                                          "Region.Label", 
-                                          "Sample.Label")])
+# Object, region and sample labels
+observation_table <- unique(bowhead_LT[, c("object", 
+                                           "Region.Label", 
+                                           "Sample.Label")])
 
 # Estimating bowhead whale abundance and density
 abund_bio_hn <- dht(model = hn$ddf,
