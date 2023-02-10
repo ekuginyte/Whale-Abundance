@@ -1,0 +1,60 @@
+---
+title: "MT5751 Estimating Animal Abundance and Biodiversity. Distance Sampling"
+author: "Group K"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    highlight: tango
+fontsize: 12pt
+---
+
+\begin{center}
+
+xxx, 180015716, 220013309
+
+\end{center}
+\
+
+```{r Libraries and Logo, fig.align='center', message=FALSE, echo = FALSE, warning=FALSE, echox=FALSE, out.width='0.50\\linewidth'}
+library(tidyverse)
+library(knitr)
+include_graphics("STA.png")
+```
+
+\newpage 
+
+\tableofcontents 
+
+\newpage
+
+### Abstract
+
+### Introduction
+
+### Mehthodology
+
+### Results
+
+### Discussion
+
+### References
+
+### Appendix
+
+R Analysis Code
+```{r Analysis Code, echo = FALSE}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
