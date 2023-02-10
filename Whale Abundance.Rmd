@@ -1,5 +1,5 @@
 ---
-title: "MT5751 Estimating Animal Abundance and Biodiversity. Distance Sampling"
+title: "MT5751: Distance Sampling Project"
 author: "Group K"
 date: "`r Sys.Date()`"
 output:
@@ -31,7 +31,54 @@ include_graphics("STA.png")
 
 ### Introduction
 
-### Mehthodology
+### Methods
+
+**Data Collection**
+
+**Data Analysis**
+\
+Due to an obscured view close to the transect line, detections were left-truncated at 100m Rekdal et al. (2015).
+\
+8 models were fit to the distance data using all combinations of hazard-rate and half-normal detection functions with cosine, hermite polynomial and simple polynomial adjustments. Model selection using Akaike information criterion (AIC) found that the best model was a half-normal with no adjustments (see figure 1). AICc was also applied due to the ratio of model parameters to observation being less than 1:40 and found the same result (Takezawa, 2014). This model had an good fit; Cramer-von Mises test (T = 0.073, p = 0.732), bootstrap Kolmogorov-Smirnov test for goodness-of-fit (D = 0.073, p = 1). Additionally a QQ-plot comparing empirical and fitted CDF had points lying approximately on the 1:1 line (see figure 1).
+
+```{r, Model Fit Plot, echo = FALSE, warning = FALSE, results = 'hide', message = FALSE}
+
+# Set up packages 
+library(Distance)
+library(tidyverse)
+library(remotes)
+
+# Getting Package Statsecol from github which contains the data
+remotes::install_github("https://github.com/chrissuthy/statsecol")
+
+# Loading in the data package
+library(statsecol)
+# Half-normal with no adjustment 
+hn <- ds(data = bowhead_LT, 
+         key = 'hn', 
+         adjustment = NULL ) 
+
+# Setting plot size
+par(mfrow=c(1,2), mar = c(5, 4, 4, 2) + 0.1, oma=c(2, 3, 5, 2))
+
+# Plotting the detection function over the distances distribution
+plot(hn, 
+     which=2, 
+     pl.col = adjustcolor("seagreen",0.5), 
+     border = NULL,
+     ylab = "Detection probability (g(x))", 
+     xlab = "Distance", 
+     las=1,
+     main = "A")
+
+# Plotting and running the Cramer-von Mises test
+
+gof_ds(hn, main = 'B')
+subtitle = ('Figure 1: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF')
+
+mtext(side=1, adj=0, cex=0.7, subtitle, outer = TRUE)
+
+``` 
 
 ### Results
 
@@ -42,14 +89,13 @@ include_graphics("STA.png")
 ### Appendix
 
 R Analysis Code
-```{r Analysis Code, echo = FALSE}
+```{r Setting up, eval = FALSE}
 #####    SETTING UP    #####
 
 # Set up packages 
 library(Distance)
 library(tidyverse)
 library(remotes)
-library(MuMIn)
 
 
 # Getting Package Statsecol from github which contains the data
@@ -60,7 +106,7 @@ library(statsecol)
 
 ```
 
-```{r}
+```{r Exploratory Analysis, echo = FALSE}
 #####    EXPLORATORY ANALYSIS    #####
 
 # look at data columns
@@ -78,7 +124,9 @@ hist(bowhead_LT$distance,
      col = adjustcolor("seagreen", 0.5), # Changing colour and intensity of bars
      las = 1) # Changing orientation of x-axis tick labels
 
+```
 
+```{r Modelling, eval = FALSE}
 #####     MODELLING     #####
 
 # Due to the long shoulder seen in the histogram, first fit a hazard rate;
@@ -130,9 +178,9 @@ hn_herm <- ds(data = bowhead_LT,
 hn_poly <- ds(data = bowhead_LT, 
               key = 'hn', 
               adjustment = 'poly' )
+```
 
-
-
+```{r Model Selection, eval = FALSE}
 #####     MODEL SELECTION     #####
 
 # Comparing Models graphically by fit of detection probability over distance distribution
@@ -169,7 +217,7 @@ summarize_ds_models(hn, hn_cos, hn_herm, hn_poly,
                     hr, hr_cos, hr_herm, hr_poly,
                     output = "plain") # Plain output works instead of equations
 
-# As they are all the same, checking whether AICc is a more appropriate measure
+# As the dataset is small, checking whether AICc is a more appropriate measure
 # To do this, Takezawa (2014) has said AICc should be used when the ratio of your parameters
   # to number of data points is less than 1:40
 
@@ -191,8 +239,9 @@ AICc(hn, hn_cos, hn_herm, hn_poly,
 # The half-normal will be chosen as it has the smallest AIC and AICc
 # No adjustment will be chosen as the adjustments don't model extra variability 
    # in the data 
+```
 
-
+```{r Model Fit, eval = FALSE}
 #####     MODEL FIT     #####
 
 # Comparing the detection function to the cramer-von mises test
@@ -208,15 +257,19 @@ plot(hn,
      ylab = "Detection probability (g(x))", 
      xlab = "Distance", 
      las=1,
-     main = "Half-normal model no adjustments")
+     main = "Half-normal Model No Adjustments")
 
-# Plotting the Cramer-von Mises test
-gof_ds(hn, main = 'Expected vs Observed CDF')
+# Plotting and running the Cramer-von Mises test and bootstrap Kolmogorov-Smirnov      test for goodness-of-fit
 
-  # The test gives a test statistic of 0.0732325 and a p-value of 0.731882
-  # Therefore the model has a good fit as the p value is much more than 0.05
+gof_ds(hn, main = 'Expected vs Observed CDF' , ks = TRUE)
 
+  # The Cramer-von Mises test gives a test statistic of 0.0732325 and a p-value of           0.731882
+  # The Kolomogorov-Smirnov test gives a test statistic stat of 0.0725551 and a             p-value of 1
 
+# Therefore the model has a good fit as the p values are much more than 0.05
+```
+
+```{r Model Inference, eval = FALSE}
 #####     MODEL INFERENCE     #####
 # Looking at model 
 summary(hn)
@@ -238,7 +291,6 @@ abund_bio_hn <- dht(model = hn$ddf,
                     region_table, 
                     sample_table, 
                     observation_table)
-
 ```
 
 
