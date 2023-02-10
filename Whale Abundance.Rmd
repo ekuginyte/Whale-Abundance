@@ -43,6 +43,201 @@ include_graphics("STA.png")
 
 R Analysis Code
 ```{r Analysis Code, echo = FALSE}
+#####    SETTING UP    #####
+
+# Set up packages 
+library(Distance)
+library(tidyverse)
+library(remotes)
+library(MuMIn)
+
+
+# Getting Package Statsecol from github which contains the data
+remotes::install_github("https://github.com/chrissuthy/statsecol")
+
+# Loading in the data package
+library(statsecol)
+
+```
+
+```{r}
+#####    EXPLORATORY ANALYSIS    #####
+
+# look at data columns
+str(bowhead_LT)
+
+# Looking at the distribution of the distances
+
+
+par(mfrow=c(1,1), 
+    mar = c(5, 4, 4, 2) + 0.1) # Setting up the plot size
+hist(bowhead_LT$distance, 
+     xlab="Distance (km)",  # Naming x-axis
+     ylab = 'Number of Bowhead Whales',  # Naming y axis
+     main = "Distances of Bowhead Whales from Line Transects", # Naming plot
+     col = adjustcolor("seagreen", 0.5), # Changing colour and intensity of bars
+     las = 1) # Changing orientation of x-axis tick labels
+
+
+#####     MODELLING     #####
+
+# Due to the long shoulder seen in the histogram, first fit a hazard rate;
+    #then fit a half-normal
+
+
+# Fitting hazard-rate detection functions with all adjustment terms 
+
+# Hazard-rate with no adjustment 
+hr <- ds(data = bowhead_LT, 
+         key = 'hr', 
+         adjustment = NULL ) 
+
+# Hazard-rate with a cosine adjustment 
+hr_cos <- ds(data = bowhead_LT, 
+             key = 'hr', 
+             adjustment = 'cos')
+
+# Hazard-rate with a hermite polynomial adjustment 
+hr_herm <- ds(data = bowhead_LT, 
+              key = 'hr', 
+              adjustment = 'herm' )
+
+# Hazard-rate with a simple polynomial adjustment 
+hr_poly <- ds(data = bowhead_LT, 
+              key = 'hr', 
+              adjustment = 'poly' ) 
+
+
+
+# Fitting half-normal detection functions with all adjustment terms 
+
+# Half-normal with no adjustment 
+hn <- ds(data = bowhead_LT, 
+         key = 'hn', 
+         adjustment = NULL ) 
+
+# Half-normal with a cosine adjustment
+hn_cos <- ds(data = bowhead_LT, 
+             key = 'hn', 
+             adjustment = 'cos' ) 
+
+# Half-normal with a hermite polynomial adjustment
+hn_herm <- ds(data = bowhead_LT, 
+              key = 'hn', 
+              adjustment = 'herm' )
+
+# Half-normal with a simple polynomial adjustment
+hn_poly <- ds(data = bowhead_LT, 
+              key = 'hn', 
+              adjustment = 'poly' )
+
+
+
+#####     MODEL SELECTION     #####
+
+# Comparing Models graphically by fit of detection probability over distance distribution
+
+# Half-normal detection function over histogram plot
+par(mfrow = c(2, 2), 
+    mar = c(5, 4, 4, 2) + 0.1) # Setting up plot size and margins
+
+# Plotting all 4 half-normal models
+plot(hn, main = "no adjustment") 
+plot(hn_cos, main = "cosine")
+plot(hn_poly, main = "polynomial")
+plot(hn_herm, main = "hermite polynomial")
+title("Half-Normal Models", 
+      line = -1, 
+      outer = TRUE) # Naming title and setting location
+
+
+# Hazard-rate Detection function over histogram plot
+par(mfrow = c(2, 2), 
+    mar = c(5, 4, 4, 2) + 0.1) # Setting up plot size and margins
+
+# Plotting all 4 hazard-rate models
+plot(hr, main = "no adjustment")
+plot(hr_cos, main = "cosine")
+plot(hr_poly, main = "polynomial")
+plot(hr_herm, main = "hermite polynomial")
+title("Hazard-Rate Models", 
+      line = -1, 
+      outer = TRUE) # Naming title and setting location
+
+# Comparing AIC of all the models 
+summarize_ds_models(hn, hn_cos, hn_herm, hn_poly, 
+                    hr, hr_cos, hr_herm, hr_poly,
+                    output = "plain") # Plain output works instead of equations
+
+# As they are all the same, checking whether AICc is a more appropriate measure
+# To do this, Takezawa (2014) has said AICc should be used when the ratio of your parameters
+  # to number of data points is less than 1:40
+
+summary(hr)
+  # Parameters = 2 : Observations = 58
+  # Therefore ratio is 1:29
+    # This ratio will be even smaller for the models with adjustments 
+
+summary(hn)
+  # This is the only model that meets the assumptions of AIC however as you 
+    # Can't compare across model selection parameters we will use AICc
+
+# Using AICc to select models 
+AICc(hn, hn_cos, hn_herm, hn_poly, 
+     hr, hr_cos, hr_herm, hr_poly)
+
+# Despite this there is no change in the best model
+
+# The half-normal will be chosen as it has the smallest AIC and AICc
+# No adjustment will be chosen as the adjustments don't model extra variability 
+   # in the data 
+
+
+#####     MODEL FIT     #####
+
+# Comparing the detection function to the cramer-von mises test
+
+# Setting plot size
+par(mfrow=c(1,2), mar = c(5, 4, 4, 2) + 0.1)
+
+# Plotting the detetion function over the distances distribution
+plot(hn, 
+     which=2, 
+     pl.col = adjustcolor("seagreen",0.5), 
+     border = NULL,
+     ylab = "Detection probability (g(x))", 
+     xlab = "Distance", 
+     las=1,
+     main = "Half-normal model no adjustments")
+
+# Plotting the Cramer-von Mises test
+gof_ds(hn, main = 'Expected vs Observed CDF')
+
+  # The test gives a test statistic of 0.0732325 and a p-value of 0.731882
+  # Therefore the model has a good fit as the p value is much more than 0.05
+
+
+#####     MODEL INFERENCE     #####
+# Looking at model 
+summary(hn)
+
+# creating subsets of the column combinations needed for dht()
+region_table <- unique(bowhead_LT[,c("Region.Label", 
+                                     "Area")])
+
+sample_table <- unique(bowhead_LT[,c("Region.Label", 
+                                     "Sample.Label", 
+                                     "Effort")])
+
+observation_table <- unique(bowhead_LT[,c("object", 
+                                          "Region.Label", 
+                                          "Sample.Label")])
+
+# Estimating bowhead whale abundance and density
+abund_bio_hn <- dht(model = hn$ddf,
+                    region_table, 
+                    sample_table, 
+                    observation_table)
 
 ```
 
