@@ -58,7 +58,7 @@ Due to an obscured view close to the transect line, detections were left-truncat
 \
 8 models were fit to the distance data using all combinations of hazard-rate and half-normal detection functions with cosine, hermite polynomial and simple polynomial adjustments. Model selection using Akaike information criterion (AIC) found that the best model was a half-normal with no adjustments (see figure 1). AICc was also applied due to the ratio of model parameters to observation being less than 1:40 and found the same result (Takezawa, 2014). This model had an good fit; Cramer-von Mises test (T = 0.073, p = 0.732), bootstrap Kolmogorov-Smirnov test for goodness-of-fit (D = 0.073, p = 1). Additionally a QQ-plot comparing empirical and fitted CDF had points lying approximately on the 1:1 line (see figure 1).
 
-```{r, Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
+```{r Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
 # Set up libraries 
 library(Distance)
 library(tidyverse)
@@ -75,7 +75,7 @@ hn <- ds(data = bowhead_LT,
          adjustment = NULL) 
 
 # Setting plot size
-par(mfrow = c(1,2), mar = c(5, 4, 4, 2) + 0.1, oma = c(2, 3, 5, 2))
+par(mfrow = c(1,2), mar = c(5.5, 4, 2, 2) + 0.1, oma = c(1, 1, 1, 1))
 
 # Plotting the detection function over the distances distribution
 plot(hn, 
@@ -96,7 +96,12 @@ mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 ``` 
 
 ### Results
+\
+**Clusters**
+\
 
+
+**Individuals**
 ### Discussion
 
 ### References
@@ -118,7 +123,7 @@ remotes::install_github("https://github.com/chrissuthy/statsecol")
 # Loading in the data package
 library(statsecol)
 ```
-
+\
 ```{r Exploratory Analysis, echo = FALSE}
 #####    EXPLORATORY ANALYSIS    #####
 
@@ -131,18 +136,13 @@ par(mfrow = c(1,1),
     mar = c(5, 4, 4, 2) + 0.1) 
 # Plot histogram of distances
 hist(bowhead_LT$distance,
-     # Naming x-axis
-     xlab = "Distance (km)",  
-     # Naming y axis
-     ylab = "Number of Bowhead Whales",  
-     # Naming plot
-     main = "Distances of Bowhead Whales from Line Transects", 
-      # Changing colour and intensity of bars
-     col = adjustcolor("seagreen", 0.5),
-     # Changing orientation of x-axis tick labels
-     las = 1) 
+     xlab = "Distance (km)", # Naming x-axis 
+     ylab = "Number of Bowhead Whales",  # Naming y axis
+     main = "Distances of Bowhead Whales from Line Transects",# Naming plot 
+     col = adjustcolor("seagreen", 0.5), # Changing colour and intensity of bars
+     las = 1) # Changing orientation of x-axis tick labels
 ```
-
+\
 ```{r Modelling, eval = FALSE}
 #####     MODELLING     #####
 
@@ -196,7 +196,7 @@ hn_poly <- ds(data = bowhead_LT,
               key = "hn", 
               adjustment = "poly" )
 ```
-
+\
 ```{r Model Selection, eval = FALSE}
 #####     MODEL SELECTION     #####
 
@@ -236,12 +236,12 @@ title("Hazard-Rate Models",
 # Comparing AIC of all the models 
 summarize_ds_models(hn, hn_cos, hn_herm, hn_poly, 
                     hr, hr_cos, hr_herm, hr_poly,
-                    # Plain output works instead of equations
-                    output = "plain") 
+                    output = "plain") # Setting Plain instead of equations
 
 # As the dataset is small, checking whether AICc is a more appropriate measure
-# To do this, Takezawa (2014) has said AICc should be used when the ratio of your parameters
-#   to number of data points is less than 1:40
+# To do this, Takezawa (2014) has said AICc should be used when the ratio of 
+# your parameters to number of data points is less than 1:40
+
 # Print summary of hazard-rate distance model
 summary(hr)
   # Parameters = 2 : Observations = 58
@@ -263,7 +263,7 @@ AICc(hn, hn_cos, hn_herm, hn_poly,
 # No adjustment will be chosen as the adjustments don"t model extra variability 
 #   in the data 
 ```
-
+\
 ```{r Model Fit, eval = FALSE}
 #####     MODEL FIT     #####
 
@@ -294,7 +294,7 @@ gof_ds(hn, main = "Expected vs Observed CDF", ks = TRUE)
 
 # Therefore the model has a good fit as the p values are much more than 0.05
 ```
-
+\
 ```{r Model Inference, eval = FALSE}
 #####     MODEL INFERENCE     #####
 # Print summary of the model
@@ -316,18 +316,56 @@ observation_table <- unique(bowhead_LT[, c("object",
                                            "Region.Label", 
                                            "Sample.Label")])
 
-# Estimating bowhead whale abundance and density
+# Finding the abundance and CI
 abund_bio_hn <- dht(model = hn$ddf,
                     region_table, 
                     sample_table, 
                     observation_table)
+
+# Viewing the abundance and CI and getting the tables for plotting
+
+# Estimated Abundance of individuals
+N_ind <- abund_bio_hn$individuals$N 
+
+# Estimated Abundance of clusters
+N_clu <- abund_bio_hn$clusters$N 
+
+# Estimated density of individuals 
+d_ind <- abund_bio_hn$individuals$D
+
+# Estimated density of clusters
+d_clu <- abund_bio_hn$clusters$D
+
+# Average probability of detection for individuals
+abund_bio_hn$individuals$average.p 
+
+# Average probability of detection for clusters
+abund_bio_hn$clusters$average.p 
 ```
+\
+```{r Results Graphs, eval = FALSE}
+
+# Changing the Region label to a factor
+    # This allows it to be plotted in a desired order
+fct_N_ind <- N_ind %>%
+  mutate(Label = as.factor(Label),
+         Label = fct_relevel(Label, 
+                             level = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total'))) 
 
 
+ggplot(fct_N_ind)+
+  geom_point(aes(x = Label, y = Estimate), stat="identity",
+             colour = 'red')+
+  geom_linerange(aes(x = Label, 
+                     ymin = lcl,
+                    ymax = ucl))+
+  xlab('Regions')+
+  ylab(')
 
 
-
-
+```
 
 
 
