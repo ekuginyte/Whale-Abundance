@@ -10,7 +10,7 @@ fontsize: 12pt
 
 \begin{center}
 
-Student numbers xxx, 180015716, 220013309
+Students: xxx, 180015716, 220013309
 
 \end{center}
 \
@@ -31,23 +31,20 @@ include_graphics("logo.png")
 ### Methods
 
 **Data Collection**
-To observe bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N,  largely covering the area of the local spring aggregation in Disko Bay. The study region on 242,650km^2^ was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7,836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). The angles were then converted to perpendicular distances ($x$) using the following equation from Buckland et al. (2001):
-
-$x = v * tan(90 - \psi )$,
-
-where $v$ is the altitude of the airplane, $\psi$ is the declination angle. Forward distance ($y$) to each sighting was calculated based on time of first sighting, time when passing abeam and speed of aircraft. For a more extensive description of the data collection refer to Rekdal et al. (2015).
+To observe bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N,  largely covering the area of the local spring aggregation in Disko Bay. The study region on 242,650km^2^ was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7,836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). The angles were then converted to perpendicular distances ($x$) using the following equation from Buckland et al. (2001): $x = v * tan(90 - \psi )$, where $v$ is the altitude of the airplane, $\psi$ is the declination angle. Forward distance ($y$) to each sighting was calculated based on time of first sighting, time when passing abeam and speed of aircraft. For a more extensive description of the data collection refer to Rekdal et al. (2015).
 
 **Distance Sampling**
 To estimate the abundance of bowhead whales, a sample representative portion of the area, i.e. the plot distance sampling, is used. Distance sampling is used in ecological surveys to account for imperfect detections and is incredibly useful considering limited resources. The bowhead whales further away are less likely to be detected, thus distance is employed as a detection bias. The detection function describes how detectability varies with distance, it includes the proportion of animals seen at a given distance and a probability of seeing an animal at a given distance.
 To employ the distance sampling, first of the assumptions need to be met:
 - the transect lines were placed at random and the bowhead whales were not affected by their placement; 
 - animals on the transect line, in this case from distance from the plane of XX were seen with probability p = 1; 
-- perpendicular distances from line to bowhead whales are uniform random variables π(x) = 1/w;
+- perpendicular distances from line to bowhead whales are uniform random variables $\pi(x) = 1/w$;
 - distances were measured without error and to the initial location.
 
 To then define the detection function $g(x)$, with the assumptions stated above fulfilled, the key functions are fitted to the model:
-- Half-normal $g(x) = exp(- x^2^ / 2\sigma^2^)$
-- Hazard-rate $g(x) = exp(-(x / \sigma)^-b^)$,
+/
+- Half-normal $g(x) = \exp(-x^2 / 2\sigma^2)$,
+- Hazard-rate $g(x) = \exp(-(x / \sigma)^{-b})$,
 
 where $\sigma$ is a scale parameter (“standard deviation”) and $b$ controls the width of the shoulder.
 
@@ -350,19 +347,19 @@ abund_bio_hn$clusters$average.p
 fct_N_ind <- N_ind %>%
   mutate(Label = as.factor(Label),
          Label = fct_relevel(Label, 
-                             level = c('2', '3', '9', 
-                                       '11', '12', '15',
-                                       'Total'))) 
+                             level = c("2", "3", "9", 
+                                       "11", "12", "15",
+                                       "Total"))) 
 
 
 ggplot(fct_N_ind)+
   geom_point(aes(x = Label, y = Estimate), stat="identity",
-             colour = 'red')+
+             colour = "red")+
   geom_linerange(aes(x = Label, 
                      ymin = lcl,
                     ymax = ucl))+
-  xlab('Regions')+
-  ylab(')
+  xlab("Regions")+
+  ylab(")
 
 
 ```
