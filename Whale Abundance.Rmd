@@ -426,20 +426,105 @@ abund_bio_hn$clusters$average.p
 ```
 \
 ```{r Results Graphs, echo=TRUE, eval=FALSE}
+
+## INDIVIDUALS ##
 # Changing the Region label to a factor
     # This allows it to be plotted in a desired order
-fct_N_ind <- N_ind %>%
+N_ind <- N_ind %>%
   mutate(Label = as.factor(Label),
          Label = fct_relevel(Label, 
-                             level = c("2", "3", "9", "11", 
-                                       "12", "15", "Total"))) 
+                             level = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total'))) 
+
+# Plotting estimates abundance data 
+ggplot(N_ind)+
+  geom_point(aes(x = Label, y = Estimate), 
+             size = 2, 
+             stat = "identity", 
+             colour = 'blue')+
+  
+  # Adding lines for Confidence Intervals
+  geom_linerange(aes(x = Label, 
+                     ymin = lcl,
+                     ymax = ucl), colour = 'darkblue')+
+  
+  # Addding labels for axis and figure legend
+  xlab('Survey Strata')+
+  ylab('Estimated Abundance')+
+  labs(caption = 'Figure 2: The estimated Bowhead whale abundance of individuals in each strata (blue dot) and \n the confidence intervals (blue) lines)')+
+  
+  # Making the caption sit at the left
+  theme(plot.caption = element_text(hjust = 0))+
+  
+  # Adding more Y axis ticks to make estimates easier to interpret
+  scale_y_continuous(breaks = round(seq(min(fct_N_ind$lcl),
+                                        max(fct_N_ind$ucl), 
+                                        by = 100)))
 
 
-ggplot(fct_N_ind)+
-  geom_point(aes(x = Label, y = Estimate), stat = "identity", colour = "red") +
-  geom_linerange(aes(x = Label, ymin = lcl, ymax = ucl)) +
-  xlab("Regions") +
-  ylab("")
+
+## CLUSTERS ##
+# Changing the Region label to a factor
+# This allows it to be plotted in a desired order
+N_clu <- N_clu %>%
+  mutate(Label = as.factor(Label),
+         Label = fct_relevel(Label, 
+                             level = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total'))) 
+
+
+# Plotting estimated abundance data 
+ggplot(N_clu)+
+  geom_point(aes(x = Label, y = Estimate), 
+             size = 2, 
+             stat = "identity", 
+             colour = 'seagreen')+
+  
+  # Adding lines for Confidence Intervals
+  geom_linerange(aes(x = Label, 
+                     ymin = lcl,
+                     ymax = ucl), colour = 'darkgreen')+
+  
+  # Addding labels for axis and figure legend
+  xlab('Survey Strata')+
+  ylab('Estimated Abundance')+
+  labs(caption = 'Figure 2: The estimated Bowhead whale abundance of clusters in each strata (green dot) and \n the confidence intervals (green lines)')+
+  
+  # Making the caption sit at the left
+  theme(plot.caption = element_text(hjust = 0))+
+  
+  # Adding more Y axis ticks to make estimates easier to interpret
+  scale_y_continuous(breaks = round(seq(min(N_clu$lcl),
+                                        max(N_clu$ucl), 
+                                        by = 100)))
+
+
+# Plotting estimated density data 
+ggplot(d_clu)+
+  geom_point(aes(x = Label, y = Estimate), 
+             stat = "identity", 
+             size = 2,
+             colour = 'black') +
+  
+  # Adding lines for Confidence Intervals
+  geom_errorbar(aes(x = Label, 
+                    ymin = lcl,
+                    ymax = ucl), colour = 'darkgreen')+
+  
+  # Addding labels for axis and figure legend
+  xlab('Survey Strata')+
+  ylab('Estimated Density')+
+  labs(caption = 'Figure 2: The estimated Bowhead whale density of clusters in each strata (green dot) and \n the confidence intervals (green lines)')+
+  
+  # Making the caption sit at the left
+  theme(plot.caption = element_text(hjust = 0))+
+  
+  # Adding more Y axis ticks to make estimates easier to interpret
+  scale_y_continuous(breaks = round(seq(min(d_clu$lcl),
+                                        max(d_clu$ucl), 
+                                        by = 0.001)))
 ```
 
 
