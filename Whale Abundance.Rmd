@@ -5,12 +5,12 @@ date: "`r Sys.Date()`"
 output:
   pdf_document:
     highlight: tango
-fontsize: 11pt
+fontsize: 10.5pt
 ---
 
 \begin{center}
 
-Students: xxx, 180015716, 220013309
+Students: 220024321, 180015716, 220013309
 
 \end{center}
 \
@@ -240,6 +240,47 @@ ggplot(N_clu)+
 
 
 ```
+\
+```{r Table with results, echo = False, warning = False, results = "hide", message = FALSE, r="asis"}
+# Results table for individuals
+abundance_table_ind <- N_ind[, c(1:2, 5:6)]
+# Round to 2 decimal places
+abundance_table_ind <- round(abundance_table_ind[, 2:4], 2)
+# Rename columns
+colnames(abundance_table_ind) <- c("Estimate", "Lower CI", "Upper Cl")
+
+# Do the same with cluster table
+abundance_table_clu <- N_ind[, c(1:2, 5:6)]
+# Round to 2 decimal places
+abundance_table_clu <- round(abundance_table_clu[, 2:4], 2)
+# Rename columns
+colnames(abundance_table_clu) <- c("Estimate", "Lower CI", "Upper Cl")
+
+# Print tables side by side
+grid.arrange(
+  # Table 1
+  tableGrob(
+    kable(
+      abundance_table_ind,
+      align = "c",
+      caption = "Abundance Estimates for Individuals"
+    )
+  ),
+  # Table 2
+  tableGrob(
+    kable(
+      abundance_table_clu,
+      align = "c",
+      caption = "Abundance Estimates for Clusters"
+    )
+  ),
+  ncol = 2
+)
+
+```
+
+\
+
 \
 
 
