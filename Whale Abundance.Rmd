@@ -117,11 +117,13 @@ mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 \
 **Individuals**
 \
-The model estimated the average detectability of individual bowhead whales to be 0.474. 
+The model estimated the average detectability of individual bowhead whales to be 0.47. 
 
-The estimated abundance of individual Bowhead whales was highest in strata 2 (138.83, CI: 291.53; 66.11) and lowest in strata 15 (5.12, CI: 39.44; 0.67). 
+The estimated abundance of individual Bowhead whales was highest in strata 2 (138.83, CI: 291.53; 66.11) and lowest in strata 15 (5.12, CI: 39.44; 0.67). Additionally
+
 
 ```{r Individual Abundance Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
+library(janitor)
 
 # Making the data 
 region_table <- unique(bowhead_LT[, c("Region.Label", 
@@ -149,35 +151,50 @@ abund_bio_hn <- dht(model = hn$ddf,
 # Estimated Abundance of individuals
 N_ind <- abund_bio_hn$individuals$N 
 
-# Estimated density of individuals 
-d_ind <- abund_bio_hn$individuals$D
-
 
 ## INDIVIDUALS ##
 # Changing the Region label to a factor
     # This allows it to be plotted in a desired order
 N_ind <- N_ind %>%
-  mutate(Label = factor(Label, levels = c("2", "3", "9", 
-                                       "11", "12", "15",
-                                       "Total"))) 
 
-# Plotting estimates abundance data 
-ggplot(N_ind) +
-  geom_point(aes(x = Label, y = Estimate), 
+
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total' )))
+
+# Summarising observed bowhead abundance
+bowhead <- bowhead_LT %>% 
+  mutate(Region.Label = factor(Region.Label, levels = c('2', '3', '9', 
+                                                        '11', '12', '15' ))) %>%
+  drop_na() %>%
+  group_by(Region.Label) %>%
+  summarise(sum = sum(size), num = length(object)) %>%
+  adorn_totals("row")
+  
+
+# Plotting estimated abundance data 
+ggplot()+
+  geom_point(data = N_ind, aes(x = Label, y = Estimate), 
              size = 2, 
              stat = "identity", 
-             colour = "blue") +
-  
+             colour = 'blue')+
+
+# Plotting observed abundance 
+  geom_point(data = bowhead, aes(x = Region.Label, y = sum),
+             size = 2, 
+             colour = 'black')+
+
   # Adding lines for Confidence Intervals
-  geom_linerange(aes(x = Label, 
+  geom_linerange(data = N_ind, aes(x = Label, 
                      ymin = lcl,
                      ymax = ucl), colour = "darkblue") +
   
   # Addding labels for axis and figure legend
-  xlab("Survey Strata") +
-  ylab("Estimated Abundance") +
-  labs(caption = "Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dot) and \n the confidence intervals (blue) lines)") +
-  
+
+  xlab('Survey Strata')+
+  ylab('Estimated Abundance')+
+  labs(caption = 'Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dots), the observed \n individual abundance in each strata (black dots) and the confidence intervals for the abundance estimates (blue) lines')+
+
   # Making the caption sit at the left
   theme(plot.caption = element_text(hjust = 0)) +
   
@@ -186,7 +203,7 @@ ggplot(N_ind) +
                                         max(N_ind$ucl), 
                                         by = 100))) +
   # Title for easy distingishing
-  labs(title = "Individual Abundance")
+  labs(title = "Individuals")
 
 ```
 
@@ -198,8 +215,6 @@ ggplot(N_ind) +
 ```{r Cluster Abundance plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE }
 ## CLUSTERS ##
 
-# Estimated density of clusters
-d_clu <- abund_bio_hn$clusters$D
 
 # Estimated Abundance of clusters
 N_clu <- abund_bio_hn$clusters$N 
@@ -212,23 +227,40 @@ N_clu <- N_clu %>%
                                        "11", "12", "15",
                                        "Total")))
 
+# Summarising observed bowhead abundance
+bowhead <- bowhead_LT %>% 
+  mutate(Region.Label = factor(Region.Label, levels = c('2', '3', '9', 
+                                                        '11', '12', '15'))) %>%
+  drop_na() %>%
+  group_by(Region.Label) %>%
+  summarise(sum = sum(size), num = length(object)) %>%
+  adorn_totals("row")
+  
+
 # Plotting estimated abundance data 
-ggplot(N_clu) +
-  geom_point(aes(x = Label, y = Estimate), 
+
+ggplot()+
+  geom_point(data = N_clu, aes(x = Label, y = Estimate), 
              size = 2, 
              stat = "identity", 
-             colour = "#66FF00") +
+             colour = 'seagreen')+
+
+# Plotting observed abundance 
+  geom_point(data = bowhead, aes(x = Region.Label, y = num),
+             size = 2, 
+             colour = 'black')+
+
   
   # Adding lines for Confidence Intervals
-  geom_linerange(aes(x = Label, 
+  geom_linerange(data = N_clu, aes(x = Label, 
                      ymin = lcl,
                      ymax = ucl), colour = "darkgreen") +
   
-  # Addding labels for axis and figure legend
-  xlab("Survey Strata") +
-  ylab("Estimated Abundance") +
-  labs(caption = "Figure 5: The estimated abundance of Bowhead whale clusters in each strata (green dot) and \n the confidence intervals (green lines)") +
-  
+  # Adding labels for axis and figure legend
+  xlab('Survey Strata')+
+  ylab('Estimated Abundance')+
+  labs(caption = 'Figure 3: The estimated abundance of Bowhead whale clusters in each strata (green dots), the observed \n cluster abundance in each strata (black dots) and the confidence intervals for the abundance estimates (green) lines')+
+
   # Making the caption sit at the left
   theme(plot.caption = element_text(hjust = 0)) +
   
@@ -237,8 +269,7 @@ ggplot(N_clu) +
                                         max(N_clu$ucl), 
                                         by = 100))) +
   # Title for distingusing graphs
-  labs(title = "Cluster Abundance")
-
+  labs(title = "Clusters")
 
 ```
 \
@@ -576,19 +607,19 @@ N_ind
 N_clu <- abund_bio_hn$clusters$N 
 N_clu
 
-# Estimated density of individuals 
-d_ind <- abund_bio_hn$individuals$D
-d_ind 
-
-# Estimated density of clusters
-d_clu <- abund_bio_hn$clusters$D
-d_clu
-
 # Average probability of detection for individuals
 abund_bio_hn$individuals$average.p 
 
 # Average probability of detection for clusters
 abund_bio_hn$clusters$average.p 
+
+# Looking at number of whales seen in each region vs the number of times whales were spotted in general
+
+bowhead_LT %>%
+  group_by(Region.Label) %>%
+  drop_na() %>%
+  summarise(total_num = sum(size), 
+            times_seen = length(object))
 
 ```
 \
