@@ -10,7 +10,7 @@ fontsize: 11pt
 
 \begin{center}
 
-Students: 220024321, 180015716, 220013309
+Students: xxx, 180015716, 220013309
 
 \end{center}
 \
@@ -31,7 +31,7 @@ include_graphics("logo.png")
 
 **Data Collection**
 \
-To observe bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N,  largely covering the area of the local spring aggregation in Disko Bay. The study region on 242,650km^2^ was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7,836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively, maximum perpendicular distance was set to 2,500m. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). The angles were then converted to perpendicular distances ($x$) using the following equation from Buckland et al. (2001): $x = v * tan(90 - \psi )$, where $v$ is the altitude of the airplane, $\psi$ is the declination angle. Forward distance ($y$) to each sighting was calculated based on time of first sighting, time when passing abeam and speed of aircraft. For a more extensive description of the data collection refer to Rekdal et al. (2015).
+To observe bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N,  largely covering the area of the local spring aggregation in Disko Bay. The study region on 242,650km^2^ was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7,836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). The angles were then converted to perpendicular distances ($x$) using the following equation from Buckland et al. (2001): $x = v * tan(90 - \psi )$, where $v$ is the altitude of the airplane, $\psi$ is the declination angle. Forward distance ($y$) to each sighting was calculated based on time of first sighting, time when passing abeam and speed of aircraft. For a more extensive description of the data collection refer to Rekdal et al. (2015).
 
 **Distance Sampling**
 \
@@ -62,7 +62,7 @@ Due to an obscured view close to the transect line, detections were left-truncat
 \
 8 models were fit to the distance data using all combinations of hazard-rate and half-normal detection functions with cosine, hermite polynomial and simple polynomial adjustments. Model selection using Akaike information criterion (AIC) found that the best model was a half-normal with no adjustments (see figure 1). AICc was also applied due to the ratio of model parameters to observation being less than 1:40 and found the same result (Takezawa, 2014). This model had an good fit; Cramer-von Mises test (T = 0.073, p = 0.732), bootstrap Kolmogorov-Smirnov test for goodness-of-fit (D = 0.073, p = 1). Additionally a QQ-plot comparing empirical and fitted CDF had points lying approximately on the 1:1 line (see figure 1).
 
-```{r Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, out.width='0.8\\linewidth', fig.align="center"}
+```{r Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
 #####    SETTING UP    #####
 
 # Getting Package Statsecol from github which contains the data
@@ -106,7 +106,7 @@ gof_ds(hn,
        col = "darkgoldenrod4",
        bg = alpha("darkgoldenrod2", 0.3))
 # Create the labels for figures
-subtitle = ("Figure 1: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF")
+subtitle = ("Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF")
 
 # Print out the labels for figures
 mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
@@ -116,8 +116,11 @@ mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 \
 **Individuals**
 \
+The model estimated the average detectability of individual bowhead whales to be 0.474. 
 
-```{r Individual Abundance Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%"}
+The estimated abundance of individual Bowhead whales was highest in strata 2 (138.83, CI: 291.53; 66.11) and lowest in strata 15 (5.12, CI: 39.44; 0.67). 
+
+```{r Individual Abundance Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
 
 # Making the data 
 region_table <- unique(bowhead_LT[, c("Region.Label", 
@@ -153,10 +156,9 @@ d_ind <- abund_bio_hn$individuals$D
 # Changing the Region label to a factor
     # This allows it to be plotted in a desired order
 N_ind <- N_ind %>%
-  mutate(Label = as.factor(Label),
-         Label = fct_relevel(Label, 
-                             level = c('2', '3', '9', '11', 
-                                       '12', '15', 'Total'))) 
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total'))) 
 
 # Plotting estimates abundance data 
 ggplot(N_ind)+
@@ -173,7 +175,7 @@ ggplot(N_ind)+
   # Addding labels for axis and figure legend
   xlab('Survey Strata')+
   ylab('Estimated Abundance')+
-  labs(caption = 'Figure 2: The estimated abundance of Bowhead whale individuals in each strata (blue dot) and \n the confidence intervals (blue) lines)')+
+  labs(caption = 'Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dot) and \n the confidence intervals (blue) lines)')+
   
   # Making the caption sit at the left
   theme(plot.caption = element_text(hjust = 0))+
@@ -181,36 +183,18 @@ ggplot(N_ind)+
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_ind$lcl),
                                         max(N_ind$ucl), 
-                                        by = 100)))
+                                        by = 100)))+
+  # Title for easy distingishing
+  labs(title = 'Individual Abundance')
+
 ```
 
 \
-```{r individual Density Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%"}
 
-# Plotting individual estimated density data 
-ggplot(d_ind)+
-  geom_point(aes(x = Label, y = Estimate), 
-             stat = "identity", 
-             size = 2,
-             colour = 'blue') +
-  
-  # Adding errorbars for Confidence Intervals
-  geom_errorbar(aes(x = Label, 
-                    ymin = lcl,
-                    ymax = ucl), colour = 'darkblue')+
-  
-  # Addding labels for axis and figure legend
-  xlab('Survey Strata')+
-  ylab('Estimated Density')+
-  labs(caption = 'Figure 3: The estimated density of Bowhead whale individuals in each strata (green dot) and \n the confidence intervals (green lines)')+
-  
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0))
-```
 
 **Clusters**
 \
-```{r Cluster Abundance plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%"}
+```{r Cluster Abundance plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE }
 ## CLUSTERS ##
 
 # Estimated density of clusters
@@ -223,11 +207,9 @@ N_clu <- abund_bio_hn$clusters$N
 # Changing the Region label to a factor
 # This allows it to be plotted in a desired order
 N_clu <- N_clu %>%
-  mutate(Label = as.factor(Label),
-         Label = fct_relevel(Label, 
-                             level = c('2', '3', '9', 
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
                                        '11', '12', '15',
-                                       'Total'))) 
+                                       'Total')))
 
 # Plotting estimated abundance data 
 ggplot(N_clu)+
@@ -244,7 +226,7 @@ ggplot(N_clu)+
   # Addding labels for axis and figure legend
   xlab('Survey Strata')+
   ylab('Estimated Abundance')+
-  labs(caption = 'Figure 4: The estimated abundance of Bowhead whale clusters in each strata (green dot) and \n the confidence intervals (green lines)')+
+  labs(caption = 'Figure 5: The estimated abundance of Bowhead whale clusters in each strata (green dot) and \n the confidence intervals (green lines)')+
   
   # Making the caption sit at the left
   theme(plot.caption = element_text(hjust = 0))+
@@ -252,31 +234,14 @@ ggplot(N_clu)+
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_clu$lcl),
                                         max(N_clu$ucl), 
-                                        by = 100)))
+                                        by = 100)))+
+  # Title for distingusing graphs
+  labs(title = 'Cluster Abundance')
+
 
 ```
 \
-```{r Cluster Density Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%" }
-# Plotting cluster estimated density data 
-ggplot(d_clu)+
-  geom_point(aes(x = Label, y = Estimate), 
-             stat = "identity", 
-             size = 2,
-             colour = '#66FF00') +
-  
-  # Adding errorbars for Confidence Intervals
-  geom_errorbar(aes(x = Label, 
-                    ymin = lcl,
-                    ymax = ucl), colour = 'darkgreen')+
-  
-  # Addding labels for axis and figure legend
-  xlab('Survey Strata')+
-  ylab('Estimated Density')+
-  labs(caption = 'Figure 5: The estimated density of Bowhead whale clusters in each strata (green dot) and \n the confidence intervals (green lines)')+
-  
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0))
-```
+
 
 ### Discussion
 
@@ -565,21 +530,26 @@ abund_bio_hn <- dht(model = hn$ddf,
 
 # Estimated Abundance of individuals
 N_ind <- abund_bio_hn$individuals$N 
+N_ind
 
 # Estimated Abundance of clusters
 N_clu <- abund_bio_hn$clusters$N 
+N_clu
 
 # Estimated density of individuals 
 d_ind <- abund_bio_hn$individuals$D
+d_ind 
 
 # Estimated density of clusters
 d_clu <- abund_bio_hn$clusters$D
+d_clu
 
 # Average probability of detection for individuals
 abund_bio_hn$individuals$average.p 
 
 # Average probability of detection for clusters
 abund_bio_hn$clusters$average.p 
+
 ```
 \
 ```{r Results Graphs, echo=TRUE, eval=FALSE}
@@ -589,10 +559,9 @@ abund_bio_hn$clusters$average.p
 # Changing the Region label to a factor
     # This allows it to be plotted in a desired order
 N_ind <- N_ind %>%
-  mutate(Label = as.factor(Label),
-         Label = fct_relevel(Label, 
-                             level = c('2', '3', '9', '11', 
-                                       '12', '15', 'Total'))) 
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total'))) 
 
 # Plotting estimates abundance data 
 ggplot(N_ind)+
@@ -617,9 +586,17 @@ ggplot(N_ind)+
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_ind$lcl),
                                         max(N_ind$ucl), 
-                                        by = 100)))
+                                        by = 100)))+
+  # Title for easy distingishing
+  labs(title = 'Individual Abundance')
+
+
 
 # Plotting individual estimated density data 
+d_ind <- d_ind %>%
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total')))
 ggplot(d_ind)+
   geom_point(aes(x = Label, y = Estimate), 
              stat = "identity", 
@@ -637,18 +614,21 @@ ggplot(d_ind)+
   labs(caption = 'Figure 3: The estimated density of Bowhead whale individuals in each strata (green dot) and \n the confidence intervals (green lines)')+
   
   # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0))
+  theme(plot.caption = element_text(hjust = 0))+
+  
+  # Title to distinguish graphs
+  labs(title = 'Individual Density')
+
 
 
 ## CLUSTERS ##
+
 # Changing the Region label to a factor
 # This allows it to be plotted in a desired order
 N_clu <- N_clu %>%
-  mutate(Label = as.factor(Label),
-         Label = fct_relevel(Label, 
-                             level = c('2', '3', '9', 
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
                                        '11', '12', '15',
-                                       'Total'))) 
+                                       'Total')))
 
 # Plotting estimated abundance data 
 ggplot(N_clu)+
@@ -673,15 +653,22 @@ ggplot(N_clu)+
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_clu$lcl),
                                         max(N_clu$ucl), 
-                                        by = 100)))
+                                        by = 100)))+
+  # Title for distingusing graphs
+  labs(title = 'Cluster Abundance')
 
 
+d_clu <- d_clu %>%
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total')))
+str(bowhead_LT)
 # Plotting cluster estimated density data 
-ggplot(d_clu)+
+ggplot(bowhead_LT)+
   geom_point(aes(x = Label, y = Estimate), 
              stat = "identity", 
              size = 2,
-             colour = '#66FF00') +
+             colour = '#66FF00') 
   
   # Adding errorbars for Confidence Intervals
   geom_errorbar(aes(x = Label, 
@@ -694,7 +681,10 @@ ggplot(d_clu)+
   labs(caption = 'Figure 5: The estimated density of Bowhead whale clusters in each strata (green dot) and \n the confidence intervals (green lines)')+
   
   # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0))
+  theme(plot.caption = element_text(hjust = 0))+
+  
+  # title to distinguish graphs
+  labs(title = 'Cluster Density')
 
 ```
 
