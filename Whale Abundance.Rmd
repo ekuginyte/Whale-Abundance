@@ -241,7 +241,7 @@ ggplot(N_clu)+
 
 ```
 \
-```{r Table with results, echo = False, warning = False, results = "hide", message = FALSE, r="asis"}
+```{r Table with results, echo = FALSE, out.width='0.60\\linewidth'}
 # Results table for individuals
 abundance_table_ind <- N_ind[, c(1:2, 5:6)]
 # Round to 2 decimal places
@@ -276,13 +276,11 @@ grid.arrange(
   ),
   ncol = 2
 )
+#kable(abundance_table_ind, caption = "Abundance Estimates for Individuals")
+#kable(abundance_table_clu, caption = "Abundance Estimates for Clusters")
 
 ```
-
 \
-
-\
-
 
 ### Discussion
 
