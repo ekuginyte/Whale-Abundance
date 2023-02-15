@@ -10,7 +10,7 @@ fontsize: 11pt
 
 \begin{center}
 
-Students: xxx, 180015716, 220013309
+Students: 220024321, 180015716, 220013309
 
 \end{center}
 \
@@ -31,7 +31,7 @@ include_graphics("logo.png")
 
 **Data Collection**
 \
-To observe bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N,  largely covering the area of the local spring aggregation in Disko Bay. The study region on 242,650km^2^ was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7,836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). The angles were then converted to perpendicular distances ($x$) using the following equation from Buckland et al. (2001): $x = v * tan(90 - \psi )$, where $v$ is the altitude of the airplane, $\psi$ is the declination angle. Forward distance ($y$) to each sighting was calculated based on time of first sighting, time when passing abeam and speed of aircraft. For a more extensive description of the data collection refer to Rekdal et al. (2015).
+To observe bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N,  largely covering the area of the local spring aggregation in Disko Bay. The study region on 242,650km^2^ was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7,836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively, maximum perpendicular distance was set to 2,500m. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). The angles were then converted to perpendicular distances ($x$) using the following equation from Buckland et al. (2001): $x = v * tan(90 - \psi )$, where $v$ is the altitude of the airplane, $\psi$ is the declination angle. Forward distance ($y$) to each sighting was calculated based on time of first sighting, time when passing abeam and speed of aircraft. For a more extensive description of the data collection refer to Rekdal et al. (2015).
 
 **Distance Sampling**
 \
@@ -62,7 +62,7 @@ Due to an obscured view close to the transect line, detections were left-truncat
 \
 8 models were fit to the distance data using all combinations of hazard-rate and half-normal detection functions with cosine, hermite polynomial and simple polynomial adjustments. Model selection using Akaike information criterion (AIC) found that the best model was a half-normal with no adjustments (see figure 1). AICc was also applied due to the ratio of model parameters to observation being less than 1:40 and found the same result (Takezawa, 2014). This model had an good fit; Cramer-von Mises test (T = 0.073, p = 0.732), bootstrap Kolmogorov-Smirnov test for goodness-of-fit (D = 0.073, p = 1). Additionally a QQ-plot comparing empirical and fitted CDF had points lying approximately on the 1:1 line (see figure 1).
 
-```{r Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
+```{r Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, out.width='0.8\\linewidth', fig.align="center"}
 #####    SETTING UP    #####
 
 # Getting Package Statsecol from github which contains the data
@@ -117,7 +117,7 @@ mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 **Individuals**
 \
 
-```{r Individual Abundance Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
+```{r Individual Abundance Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%"}
 
 # Making the data 
 region_table <- unique(bowhead_LT[, c("Region.Label", 
@@ -185,7 +185,7 @@ ggplot(N_ind)+
 ```
 
 \
-```{r individual Density Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
+```{r individual Density Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%"}
 
 # Plotting individual estimated density data 
 ggplot(d_ind)+
@@ -210,7 +210,7 @@ ggplot(d_ind)+
 
 **Clusters**
 \
-```{r Cluster Abundance plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE }
+```{r Cluster Abundance plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%"}
 ## CLUSTERS ##
 
 # Estimated density of clusters
@@ -256,7 +256,7 @@ ggplot(N_clu)+
 
 ```
 \
-```{r Cluster Density Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE }
+```{r Cluster Density Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="70%" }
 # Plotting cluster estimated density data 
 ggplot(d_clu)+
   geom_point(aes(x = Label, y = Estimate), 
