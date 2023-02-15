@@ -108,20 +108,23 @@ gof_ds(hn,
        col = "darkgoldenrod4",
        bg = alpha("darkgoldenrod2", 0.3))
 # Create the labels for figures
-subtitle = ("Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF", size = 12)
+subtitle = ("Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF")
 
 # Print out the labels for figures
 mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 ``` 
+Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution of distances. B is the QQ-plot of the expected vs observed CDF
+\
 
 ### Results
-
 \
-The model estimated the average detectability of individual bowhead whales to be 0.474. 
+**Individuals**
+\
+The model estimated the average detectability of **individual** bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see figure 2). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see figure 2). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see figure 2).
+\
+The model estimated the average detectability of **clusters** of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see figure 3) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see figure 3)
 
-The estimated abundance of individual Bowhead whales was highest in strata 2 (138.83, CI: 291.53; 66.11) and lowest in strata 15 (5.12, CI: 39.44; 0.67). 
-
-```{r Individual and Cluster Abundance Plots, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="53%"}
+```{r Individual and Cluster Abundance Plots, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="50%"}
 library(janitor)
 
 # Making the data 
@@ -174,19 +177,19 @@ bowhead <- bowhead_LT %>%
 # Plotting estimated abundance data 
 ggplot() +
   geom_point(data = N_ind, aes(x = Label, y = Estimate), 
-             size = 2, 
+             size = 3, 
              stat = "identity", 
              colour = "blue") +
 
 # Plotting observed abundance 
   geom_point(data = bowhead, aes(x = Region.Label, y = sum),
-             size = 2, 
+             size = 3, 
              colour = "black") +
 
   # Adding lines for Confidence Intervals
   geom_linerange(data = N_ind, aes(x = Label, 
                      ymin = lcl,
-                     ymax = ucl), colour = "darkblue") +
+                     ymax = ucl), colour = "darkblue", size = 1) +
   
   # Addding labels for axis and figure legend
 
@@ -205,7 +208,11 @@ ggplot() +
                                         max(N_ind$ucl), 
                                         by = 100))) +
   # Title for easy distingishing
-  labs(title = "Individuals")
+  labs(title = "Individuals") +
+  # Making the text bigger
+  theme(axis.text = element_text(size = 12), 
+        axis.title = element_text(size = 17), 
+        plot.title = element_text(size = 20)) 
 
 
 ## CLUSTERS ##
@@ -236,20 +243,25 @@ bowhead <- bowhead_LT %>%
 
 ggplot() +
   geom_point(data = N_clu, aes(x = Label, y = Estimate), 
-             size = 2, 
+             size = 3, 
              stat = "identity", 
              colour = "seagreen") +
 
 # Plotting observed abundance 
   geom_point(data = bowhead, aes(x = Region.Label, y = num),
-             size = 2, 
+             size = 3, 
              colour = "black") +
 
   
   # Adding lines for Confidence Intervals
   geom_linerange(data = N_clu, aes(x = Label, 
                      ymin = lcl,
-                     ymax = ucl), colour = "darkgreen") +
+                     ymax = ucl), colour = "darkgreen", size = 1) +
+  
+    # Making the text bigger
+  theme(axis.text = element_text(size = 12), 
+        axis.title = element_text(size = 17), 
+        plot.title = element_text(size = 20)) +
   
   # Adding labels for axis and figure legend
   xlab("Survey Strata") +
