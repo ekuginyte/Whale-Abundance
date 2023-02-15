@@ -106,20 +106,18 @@ gof_ds(hn,
        pch = 21,
        col = "darkgoldenrod4",
        bg = alpha("darkgoldenrod2", 0.3))
-# Create the labels for figures
-subtitle = ("Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF")
 
 # Print out the labels for figures
 mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 ``` 
+Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution of distances. B is the QQ-plot of the expected vs observed CDF
+\
 
 ### Results
 \
 **Individuals**
 \
-The model estimated the average detectability of individual bowhead whales to be 0.47. 
-
-The estimated abundance of individual Bowhead whales was highest in strata 2 (138.83, CI: 291.53; 66.11) and lowest in strata 15 (5.12, CI: 39.44; 0.67). Additionally
+The model estimated the average detectability of individual bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see figure 2). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see figure 2). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see figure 2).
 
 
 ```{r Individual Abundance Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE}
@@ -175,28 +173,30 @@ bowhead <- bowhead_LT %>%
 # Plotting estimated abundance data 
 ggplot()+
   geom_point(data = N_ind, aes(x = Label, y = Estimate), 
-             size = 2, 
+             size = 3, 
              stat = "identity", 
              colour = 'blue')+
 
 # Plotting observed abundance 
   geom_point(data = bowhead, aes(x = Region.Label, y = sum),
-             size = 2, 
+             size = 3, 
              colour = 'black')+
 
   # Adding lines for Confidence Intervals
   geom_linerange(data = N_ind, aes(x = Label, 
-                     ymin = lcl,
-                     ymax = ucl), colour = "darkblue") +
+                                   ymin = lcl,
+                                   ymax = ucl), colour = "darkblue",
+                                                size = 1) +
   
   # Addding labels for axis and figure legend
 
   xlab('Survey Strata')+
   ylab('Estimated Abundance')+
-  labs(caption = 'Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dots), the observed \n individual abundance in each strata (black dots) and the confidence intervals for the abundance estimates (blue) lines')+
-
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0)) +
+  
+  # Making the text bigger
+  theme(axis.text = element_text(size = 12), 
+        axis.title = element_text(size = 17), 
+        plot.title = element_text(size = 20)) +
   
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_ind$lcl),
@@ -206,12 +206,13 @@ ggplot()+
   labs(title = "Individuals")
 
 ```
-
+Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dots), the observed individual abundance in each strata (black dots) and the confidence intervals for the abundance estimates (blue) lines')+
 \
 
 
 **Clusters**
 \
+The model estimated the average detectability of clusters of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see figure 3) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see figure 3)
 ```{r Cluster Abundance plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE }
 ## CLUSTERS ##
 
@@ -241,28 +242,30 @@ bowhead <- bowhead_LT %>%
 
 ggplot()+
   geom_point(data = N_clu, aes(x = Label, y = Estimate), 
-             size = 2, 
+             size = 3, 
              stat = "identity", 
              colour = 'seagreen')+
 
 # Plotting observed abundance 
   geom_point(data = bowhead, aes(x = Region.Label, y = num),
-             size = 2, 
-             colour = 'black')+
+             size = 3, 
+             colour = 'black') +
 
   
   # Adding lines for Confidence Intervals
   geom_linerange(data = N_clu, aes(x = Label, 
-                     ymin = lcl,
-                     ymax = ucl), colour = "darkgreen") +
+                                  ymin = lcl,
+                                  ymax = ucl), colour = "darkgreen",
+                                               size = 1) +
+  
+  # Making the text bigger
+  theme(axis.text = element_text(size = 12), 
+        axis.title = element_text(size = 17), 
+        plot.title = element_text(size = 20)) +
   
   # Adding labels for axis and figure legend
-  xlab('Survey Strata')+
-  ylab('Estimated Abundance')+
-  labs(caption = 'Figure 3: The estimated abundance of Bowhead whale clusters in each strata (green dots), the observed \n cluster abundance in each strata (black dots) and the confidence intervals for the abundance estimates (green) lines')+
-
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0)) +
+  xlab('Survey Strata') +
+  ylab('Estimated Abundance') +
   
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_clu$lcl),
@@ -272,6 +275,7 @@ ggplot()+
   labs(title = "Clusters")
 
 ```
+Figure 3: The estimated abundance of Bowhead whale clusters in each strata (green dots), the observed cluster abundance in each strata (black dots) and the confidence intervals for the abundance estimates (green) lines') 
 \
 ```{r Table with results, echo = FALSE, out.width="0.60\\linewidth"}
 # Results table for individuals
@@ -308,8 +312,8 @@ grid.arrange(
   ),
   ncol = 2
 )
-#kable(abundance_table_ind, caption = "Abundance Estimates for Individuals")
-#skable(abundance_table_clu, caption = "Abundance Estimates for Clusters")
+kable(abundance_table_ind, caption = "Abundance Estimates for Individuals")
+kable(abundance_table_clu, caption = "Abundance Estimates for Clusters")
 
 ```
 \
@@ -320,7 +324,7 @@ grid.arrange(
 
 ### Appendix
 
-R Analysis Code
+**R Analysis Code**
 ```{r Setting up, echo=TRUE, eval=FALSE}
 #####    SETTING UP    #####
 
@@ -618,78 +622,72 @@ abund_bio_hn$clusters$average.p
 bowhead_LT %>%
   group_by(Region.Label) %>%
   drop_na() %>%
-  summarise(total_num = sum(size), 
-            times_seen = length(object))
+  summarise(individual = sum(size), 
+            cluster = length(object))
 
 ```
 \
 ```{r Results Graphs, echo=TRUE, eval=FALSE}
 ##### GRAPHS FOR RESULTS #####
 
+# Library to summarise observed abundance (allows for adorn_totals function)
+library(janitor)
+
+
 ## INDIVIDUALS ##
 # Changing the Region label to a factor
     # This allows it to be plotted in a desired order
 N_ind <- N_ind %>%
-  mutate(Label = factor(Label, levels = c("2", "3", "9", 
-                                       "11", "12", "15",
-                                       "Total"))) 
 
-# Plotting estimates abundance data 
-ggplot(N_ind) +
-  geom_point(aes(x = Label, y = Estimate), 
-             size = 2, 
-             stat = "identity", 
-             colour = "blue") +
+
+  mutate(Label = factor(Label, levels = c('2', '3', '9', 
+                                       '11', '12', '15',
+                                       'Total' )))
+
+# Summarising observed bowhead abundance
+bowhead <- bowhead_LT %>% 
+  mutate(Region.Label = factor(Region.Label, levels = c('2', '3', '9', 
+                                                        '11', '12', '15' ))) %>%
+  drop_na() %>%
+  group_by(Region.Label) %>%
+  summarise(sum = sum(size), num = length(object)) %>%
+  adorn_totals("row")
   
+
+# Plotting estimated abundance data 
+ggplot()+
+  geom_point(data = N_ind, aes(x = Label, y = Estimate), 
+             size = 3, 
+             stat = "identity", 
+             colour = 'blue')+
+
+# Plotting observed abundance 
+  geom_point(data = bowhead, aes(x = Region.Label, y = sum),
+             size = 3, 
+             colour = 'black')+
+
   # Adding lines for Confidence Intervals
-  geom_linerange(aes(x = Label, 
-                     ymin = lcl,
-                     ymax = ucl), colour = "darkblue") +
+  geom_linerange(data = N_ind, aes(x = Label, 
+                                   ymin = lcl,
+                                   ymax = ucl), colour = "darkblue",
+                                                size = 1) +
   
   # Addding labels for axis and figure legend
-  xlab("Survey Strata") +
-  ylab("Estimated Abundance") +
-  labs(caption = "Figure 2: The estimated abundance of Bowhead whale individuals in each strata (blue dot) and \n the confidence intervals (blue) lines)") +
+
+  xlab('Survey Strata')+
+  ylab('Estimated Abundance')+
   
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0)) +
+  # Making the text bigger
+  theme(axis.text = element_text(size = 12), 
+        axis.title = element_text(size = 17), 
+        plot.title = element_text(size = 20)) +
   
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_ind$lcl),
                                         max(N_ind$ucl), 
                                         by = 100))) +
   # Title for easy distingishing
-  labs(title = "Individual Abundance")
-
-
-
-# Plotting individual estimated density data 
-d_ind <- d_ind %>%
-  mutate(Label = factor(Label, levels = c("2", "3", "9", 
-                                       "11", "12", "15",
-                                       "Total")))
-ggplot(d_ind) +
-  geom_point(aes(x = Label, y = Estimate), 
-             stat = "identity", 
-             size = 2,
-             colour = "blue") +
-  
-  # Adding errorbars for Confidence Intervals
-  geom_errorbar(aes(x = Label, 
-                    ymin = lcl,
-                    ymax = ucl), colour = "darkblue") +
-  
-  # Addding labels for axis and figure legend
-  xlab("Survey Strata") +
-  ylab("Estimated Density") +
-  labs(caption = "Figure 3: The estimated density of Bowhead whale individuals in each strata (green dot) and \n the confidence intervals (green lines)") +
-  
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0)) +
-  
-  # Title to distinguish graphs
-  labs(title = "Individual Density")
-
+  labs(title = "Individuals")
 
 
 ## CLUSTERS ##
@@ -701,61 +699,52 @@ N_clu <- N_clu %>%
                                        "11", "12", "15",
                                        "Total")))
 
+# Summarising observed bowhead abundance
+bowhead <- bowhead_LT %>% 
+  mutate(Region.Label = factor(Region.Label, levels = c('2', '3', '9', 
+                                                        '11', '12', '15'))) %>%
+  drop_na() %>%
+  group_by(Region.Label) %>%
+  summarise(sum = sum(size), num = length(object)) %>%
+  adorn_totals("row")
+  
+
 # Plotting estimated abundance data 
-ggplot(N_clu) +
-  geom_point(aes(x = Label, y = Estimate), 
-             size = 2, 
+
+ggplot()+
+  geom_point(data = N_clu, aes(x = Label, y = Estimate), 
+             size = 3, 
              stat = "identity", 
-             colour = "#66FF00") +
+             colour = 'seagreen')+
+
+# Plotting observed abundance 
+  geom_point(data = bowhead, aes(x = Region.Label, y = num),
+             size = 3, 
+             colour = 'black') +
+
   
   # Adding lines for Confidence Intervals
-  geom_linerange(aes(x = Label, 
-                     ymin = lcl,
-                     ymax = ucl), colour = "darkgreen") +
+  geom_linerange(data = N_clu, aes(x = Label, 
+                                  ymin = lcl,
+                                  ymax = ucl), colour = "darkgreen",
+                                               size = 1) +
   
-  # Addding labels for axis and figure legend
-  xlab("Survey Strata") +
-  ylab("Estimated Abundance") +
-  labs(caption = "Figure 4: The estimated abundance of Bowhead whale clusters in each strata (green dot) and \n the confidence intervals (green lines)") +
+  # Making the text bigger
+  theme(axis.text = element_text(size = 12), 
+        axis.title = element_text(size = 17), 
+        plot.title = element_text(size = 20)) +
   
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0)) +
+  # Adding labels for axis and figure legend
+  xlab('Survey Strata') +
+  ylab('Estimated Abundance') +
   
   # Adding more Y axis ticks to make estimates easier to interpret
   scale_y_continuous(breaks = round(seq(min(N_clu$lcl),
                                         max(N_clu$ucl), 
                                         by = 100))) +
   # Title for distingusing graphs
-  labs(title = "Cluster Abundance")
+  labs(title = "Clusters")
 
-
-d_clu <- d_clu %>%
-  mutate(Label = factor(Label, levels = c("2", "3", "9", 
-                                       "11", "12", "15",
-                                       "Total")))
-str(bowhead_LT)
-# Plotting cluster estimated density data 
-ggplot(bowhead_LT) +
-  geom_point(aes(x = Label, y = Estimate), 
-             stat = "identity", 
-             size = 2,
-             colour = "#66FF00") 
-  
-  # Adding errorbars for Confidence Intervals
-  geom_errorbar(aes(x = Label, 
-                    ymin = lcl,
-                    ymax = ucl), colour = "darkgreen") +
-  
-  # Addding labels for axis and figure legend
-  xlab("Survey Strata") +
-  ylab("Estimated Density") +
-  labs(caption = "Figure 5: The estimated density of Bowhead whale clusters in each strata (green dot) and \n the confidence intervals (green lines)") +
-  
-  # Making the caption sit at the left
-  theme(plot.caption = element_text(hjust = 0)) +
-  
-  # title to distinguish graphs
-  labs(title = "Cluster Density")
 
 ```
 
