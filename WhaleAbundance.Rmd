@@ -26,7 +26,7 @@ We have evenly spread the work, if someone was struggling with a part, another p
 
 ```{r Libraries and Logo, fig.align="center", message=FALSE, echo = FALSE, warning=FALSE, echox=FALSE, out.width="0.47\\linewidth"}
 library(knitr)
-include_graphics("Subject.png")
+include_graphics("Subject.jpg")
 include_graphics("logo.png")
 ```
 
@@ -35,7 +35,7 @@ include_graphics("logo.png")
 ### Abstract
 
 \
-The study focuses on the population of bowhead whales in West Greenland, an area with history of exploitative whaling practise (). The aim of the study is to estimate and analyse the bowhead whale and their group abundance using conventional distance sampling. A model using a half-normal detection function with no adjustments was selected. It estimated the probability of detection of individual bowhead whales to be 
+The study focuses on the population of bowhead whales in West Greenland, an area with history of exploitative whaling practise. The aim of the study is to estimate and analyse the bowhead whale and their group abundance using conventional distance sampling. A model using a half-normal detection function with no adjustments was selected. It estimated the probability of detection of individual bowhead whales to be 
 
 ### Introduction
 
@@ -46,7 +46,6 @@ Accurate estimation of animal populations is essential for wildlife management a
 # Include Map
 library(htmltools)
 include_graphics("image.png")
-
 # Include title
 #(A) Strata map, (B) The planned transects (red) and surveyed transect lines (blue) and (C) the #sightings of groups of bowhead whales (including uncertain and sightings with missing angle #measurements) in West Greenland during aerial surveys in March–April 2012 (Rekdal et al., 2015)
 ```
@@ -66,7 +65,6 @@ Model selection using Akaike information criterion (AIC) found that the best mod
 
 ```{r Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, out.width="0.60\\linewidth", fig.align="center"}
 #####    SETTING UP    #####
-
 # Getting Package Statsecol from github which contains the data
 remotes::install_github("https://github.com/chrissuthy/statsecol")
 # Loading in the data package
@@ -76,7 +74,6 @@ library(Distance)
 library(tidyverse)
 library(remotes)
 library(MuMIn)
-
 # First fit the most basic model to explore it.
 # Distance model with half-normal key function, no adjustment.
 hn <- ds(data = bowhead_LT, 
@@ -84,10 +81,8 @@ hn <- ds(data = bowhead_LT,
          key = "hn", 
          # No adjustment argument
          adjustment = NULL) 
-
 # Setting plot size
 par(mfrow = c(1,2), mar = c(5.5, 4, 2, 2) + 0.1, oma = c(1, 1, 1, 1))
-
 # Plotting the detection function over the distances distribution
 plot(hn, 
      which = 2, 
@@ -99,7 +94,6 @@ plot(hn,
      lwd = 1.4,
      bg = alpha("darkgoldenrod2", 0.3),
      pch = 21)
-
 # Plotting and running the Cramer-von Mises test
 gof_ds(hn, 
        main = "B",
@@ -109,7 +103,6 @@ gof_ds(hn,
        bg = alpha("darkgoldenrod2", 0.3))
 # Create the labels for figures
 subtitle = ("Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF")
-
 # Print out the labels for figures
 mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
 ``` 
@@ -126,44 +119,32 @@ The model estimated the average detectability of **clusters** of Bowhead whales 
 
 ```{r Individual and Cluster Abundance Plots, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="50%"}
 library(janitor)
-
 # Making the data 
 region_table <- unique(bowhead_LT[, c("Region.Label", 
                                       "Area")])
-
 # Region and sample labels, effort
 sample_table <- unique(bowhead_LT[, c("Region.Label", 
                                       "Sample.Label", 
                                       "Effort")])
-
 # Object, region and sample labels
 observation_table <- unique(bowhead_LT[, c("object", 
                                            "Region.Label", 
                                            "Sample.Label")])
-
 # Finding the abundance and CI
 abund_bio_hn <- dht(model = hn$ddf,
                     region_table, 
                     sample_table, 
                     observation_table)
-
-
 # Viewing the abundance and CI and getting the tables for plotting
-
 # Estimated Abundance of individuals
 N_ind <- abund_bio_hn$individuals$N 
-
-
 ## INDIVIDUALS ##
 # Changing the Region label to a factor
     # This allows it to be plotted in a desired order
 N_ind <- N_ind %>%
-
-
   mutate(Label = factor(Label, levels = c("2", "3", "9", 
                                        "11", "12", "15",
                                        "Total" )))
-
 # Summarising observed bowhead abundance
 bowhead <- bowhead_LT %>% 
   mutate(Region.Label = factor(Region.Label, levels = c("2", "3", "9", 
@@ -173,33 +154,28 @@ bowhead <- bowhead_LT %>%
   summarise(sum = sum(size), num = length(object)) %>%
   adorn_totals("row")
   
-
 # Plotting estimated abundance data 
 ggplot() +
   geom_point(data = N_ind, aes(x = Label, y = Estimate), 
              size = 3, 
              stat = "identity", 
              colour = "blue") +
-
 # Plotting observed abundance 
   geom_point(data = bowhead, aes(x = Region.Label, y = sum),
              size = 3, 
              colour = "black") +
-
   # Adding lines for Confidence Intervals
   geom_linerange(data = N_ind, aes(x = Label, 
                      ymin = lcl,
                      ymax = ucl), colour = "darkblue", size = 1) +
   
   # Addding labels for axis and figure legend
-
   xlab("Survey Strata") +
   ylab("Estimated Abundance") +
   labs(caption = "Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dots), the observed \n individual abundance in each strata (black dots) and the confidence intervals for the abundance estimates (blue) lines") +
   
   # Increase size of text
   theme(plot.caption = element_text(hjust = 0, size = 11)) +
-
   # Making the caption sit at the left
   theme(plot.caption = element_text(hjust = 0)) +
   
@@ -213,22 +189,15 @@ ggplot() +
   theme(axis.text = element_text(size = 12), 
         axis.title = element_text(size = 17), 
         plot.title = element_text(size = 20)) 
-
-
 ## CLUSTERS ##
-
-
 # Estimated Abundance of clusters
 N_clu <- abund_bio_hn$clusters$N 
-
-
 # Changing the Region label to a factor
 # This allows it to be plotted in a desired order
 N_clu <- N_clu %>%
   mutate(Label = factor(Label, levels = c("2", "3", "9", 
                                        "11", "12", "15",
                                        "Total")))
-
 # Summarising observed bowhead abundance
 bowhead <- bowhead_LT %>% 
   mutate(Region.Label = factor(Region.Label, levels = c("2", "3", "9", 
@@ -238,20 +207,16 @@ bowhead <- bowhead_LT %>%
   summarise(sum = sum(size), num = length(object)) %>%
   adorn_totals("row")
   
-
 # Plotting estimated abundance data 
-
 ggplot() +
   geom_point(data = N_clu, aes(x = Label, y = Estimate), 
              size = 3, 
              stat = "identity", 
              colour = "seagreen") +
-
 # Plotting observed abundance 
   geom_point(data = bowhead, aes(x = Region.Label, y = num),
              size = 3, 
              colour = "black") +
-
   
   # Adding lines for Confidence Intervals
   geom_linerange(data = N_clu, aes(x = Label, 
@@ -270,7 +235,6 @@ ggplot() +
   
   # Increase size of text
   theme(plot.caption = element_text(hjust = 0, size = 11)) +
-
   # Making the caption sit at the left
   theme(plot.caption = element_text(hjust = 0)) +
   
@@ -289,18 +253,15 @@ abundance_table_ind <- N_ind[, c(1:2, 5:6)]
 abundance_table_ind <- round(abundance_table_ind[, 2:4], 2)
 # Rename columns
 colnames(abundance_table_ind) <- c("Individual Abundance Estimates", "Lower CI", "Upper Cl")
-
 # Do the same with cluster table
 abundance_table_clu <- N_ind[, c(1:2, 5:6)]
 # Round to 2 decimal places
 abundance_table_clu <- round(abundance_table_clu[, 2:4], 2)
 # Rename columns
 colnames(abundance_table_clu) <- c("Cluster Abundance Estimates", "Lower CI", "Upper Cl")
-
 # Print the tables
 #kable(abundance_table_ind, caption = "Abundance Estimates for Individuals")
 #kable(abundance_table_clu, caption = "Abundance Estimates for Clusters")
-
 # Merge tables with an empty column between them
 abundance_table <- cbind(abundance_table_ind, "", abundance_table_clu)
 # Print the table
@@ -318,13 +279,28 @@ For future studies, surveys could be collected over years and compared as time s
 \
 
 ### References
+\
+
+ BARKHAM, (no date) The Basque Whaling Establishments .in Labrador, View of the Basque whaling establishments in Labrador 1536-1632 - a summary. Available at: https://journalhosting.ucalgary.ca/index.php/arctic/article/view/65284/49198 (Accessed: February 14, 2023). 
+
+Bockstoce , J.R. and Burns , J.J. (no date) Commercial whaling in the North Pacific Sector - Daniel B. Botkin. Available at: https://www.danielbbotkin.com/wp-content/uploads/2013/12/Bockstoce_and_Burns_1993.pdf (Accessed: February 14, 2023)
+
+Heide-Jørgensen, M.P. et al. (no date) Increasing abundance of bowhead whales in West Greenland. Available at: https://royalsocietypublishing.org/doi/10.1098/rsbl.2007.0310 (Accessed: February 14, 2023). 
+
+Miller, D.L., Rexstad, E.A. and Thomas, L. (no date) “Spatial models for distance sampling data: recent developments and future directions. https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.12105,” in L.M. Burt (ed.) Methods in Ecology and Evolution. 11th edn
+
+Rekdal, S.L. et al. (2014) “Trends in bowhead whales in West Greenland: Aerial surveysvs. genetic capture-recapture analyses,” Marine Mammal Science, 31(1), pp. 133–154. Available at: https://doi.org/10.1111/mms.12150. 
+
+Takezawa, K. (no date) Learning regression analysis by Simulation, SpringerLink. Springer Japan. Available at: https://link.springer.com/book/10.1007/978-4-431-54321-3 (Accessed: February 16, 2023). 
+
+Woodby, D.A. (no date) Stock sizes prior to commercial whaling - Daniel B. Botkin. Available at: https://www.danielbbotkin.com/wp-content/uploads/2013/12/Stock_Sizes_Bowheads.pdf (Accessed: February 14, 2023)
+\
 
 ### Appendix
 
 R Analysis Code
 ```{r Setting up, echo=TRUE, eval=FALSE}
 #####    SETTING UP    #####
-
 # Getting Package Statsecol from github which contains the data
 remotes::install_github("https://github.com/chrissuthy/statsecol")
 # Loading in the data package
@@ -338,10 +314,8 @@ library(MuMIn)
 \
 ```{r Exploratory Analysis, echo=TRUE, eval=FALSE}
 #####    EXPLORATORY ANALYSIS    #####
-
 # Inspect data
 df <- str(bowhead_LT)
-
 # Looking at the distribution of the distances
 # Setting up the plot size
 par(mfrow = c(1,1), 
@@ -363,51 +337,38 @@ hist(bowhead_LT$distance,
 \
 ```{r Modelling, echo=TRUE, eval=FALSE}
 #####     MODELLING     #####
-
 # Due to the long shoulder seen in the histogram, first fit a hazard rate;
 #   then fit a half-normal
-
-
 # Fitting hazard-rate detection functions with all adjustment terms 
-
 # Hazard-rate with no adjustment 
 hr <- ds(data = bowhead_LT, 
          key = "hr", 
          adjustment = NULL) 
-
 # Hazard-rate with a cosine adjustment 
 hr_cos <- ds(data = bowhead_LT, 
              key = "hr", 
              adjustment = "cos")
-
 # Hazard-rate with a hermite polynomial adjustment 
 hr_herm <- ds(data = bowhead_LT, 
               key = "hr", 
               adjustment = "herm")
-
 # Hazard-rate with a simple polynomial adjustment 
 hr_poly <- ds(data = bowhead_LT, 
               key = "hr", 
               adjustment = "poly") 
-
-
 # Fitting half-normal detection functions with all adjustment terms 
-
 # Half-normal with no adjustment 
 hn <- ds(data = bowhead_LT, 
          key = "hn", 
          adjustment = NULL) 
-
 # Half-normal with a cosine adjustment
 hn_cos <- ds(data = bowhead_LT, 
              key = "hn", 
              adjustment = "cos") 
-
 # Half-normal with a hermite polynomial adjustment
 hn_herm <- ds(data = bowhead_LT, 
               key = "hn", 
               adjustment = "herm")
-
 # Half-normal with a simple polynomial adjustment
 hn_poly <- ds(data = bowhead_LT, 
               key = "hn", 
@@ -416,16 +377,13 @@ hn_poly <- ds(data = bowhead_LT,
 \
 ```{r Model Selection, echo=TRUE, eval=FALSE}
 #####     MODEL SELECTION     #####
-
 # Comparing Models graphically by fit of detection probability over 
 #   distance distribution
-
 # Half-normal detection function over histogram plot
 # Setting up plot size and margins
 par(mfrow = c(2, 2), 
     # Set margins
     mar = c(5, 4, 4, 2) + 0.1) 
-
 # Plotting all 4 half-normal models
 plot(hn, 
      pl.col = adjustcolor("seagreen", 0.5),
@@ -456,13 +414,10 @@ title("Half-Normal Models",
       line = -1, 
       # Naming title and setting location
       outer = TRUE) 
-
-
 # Hazard-rate Detection function over histogram plot
 par(mfrow = c(2, 2), 
     # Setting up plot size and margins
     mar = c(5, 4, 4, 2) + 0.1) 
-
 # Plotting all 4 hazard-rate models
 plot(hr, 
      pl.col = adjustcolor("seagreen", 0.5),
@@ -492,34 +447,27 @@ title("Hazard-Rate Models",
       line = -1, 
       # Naming title and setting location
       outer = TRUE)
-
 # Comparing AIC of all the models 
 summarize_ds_models(hn, hn_cos, hn_herm, hn_poly, 
                     hr, hr_cos, hr_herm, hr_poly,
                     # Setting Plain instead of equations
                     output = "plain")
-
 # As the dataset is small, checking whether AICc is a more appropriate measure
 # To do this, Takezawa (2014) has said AICc should be used when the ratio of 
 # your parameters to number of data points is less than 1:40
-
 # Print summary of hazard-rate distance model
 summary(hr)
   # Parameters = 2 : Observations = 58
   # Therefore ratio is 1:29
   #   This ratio will be even smaller for the models with adjustments 
-
 # Print summary of half-normal distance model
 summary(hn)
   # This is the only model that meets the assumptions of AIC however as you 
   #   Can"t compare across model selection parameters we will use AICc
-
 # Using AICc to select models 
 AICc(hn, hn_cos, hn_herm, hn_poly, 
      hr, hr_cos, hr_herm, hr_poly)
-
 # Despite this there is no change in the best model
-
 # The half-normal will be chosen as it has the smallest AIC and AICc
 # No adjustment will be chosen as the adjustments don"t model extra variability 
 #   in the data 
@@ -527,14 +475,11 @@ AICc(hn, hn_cos, hn_herm, hn_poly,
 \
 ```{r Model Fit, echo=TRUE, eval=FALSE}
 #####     MODEL FIT     #####
-
 # Comparing the detection function to the cramer-von mises test
-
 # Setting plot size
 par(mfrow = c(1,2), 
     # Set margins
     mar = c(5, 4, 4, 2) + 0.1)
-
 # Plotting the detetion function over the distances distribution
 plot(hn, 
      which = 2, 
@@ -547,10 +492,8 @@ plot(hn,
      bg = alpha("darkgoldenrod2", 0.3),
      pch = 21,
      main = "Half-normal Model No Adjustments")
-
 # Plotting and running the Cramer-von Mises test and bootstrap Kolmogorov-Smirnov      
 #   test for goodness-of-fit
-
 gof_ds(hn, 
        main = "Expected vs Observed CDF", 
        lwd = 1.4,
@@ -558,12 +501,10 @@ gof_ds(hn,
        bg = alpha("darkgoldenrod2", 0.3),
        ks = TRUE,
        col = "darkgoldenrod4")
-
   # The Cramer-von Mises test gives a test statistic of 0.0732325 and a p-value 
   #   of 0.731882
   # The Kolomogorov-Smirnov test gives a test statistic stat of 0.0725551 and a             
   #   p-value of 1
-
 # Therefore the model has a good fit as the p values are much more than 0.05
 ```
 \
@@ -571,59 +512,45 @@ gof_ds(hn,
 #####     MODEL INFERENCE     #####
 # Print summary of the model
 summary(hn)
-
 # Creating subsets of the column combinations needed for dht() density and 
 #   abundance estimate and variances function.
 # Region labels and areas. 
 region_table <- unique(bowhead_LT[, c("Region.Label", 
                                       "Area")])
-
 # Region and sample labels, effort
 sample_table <- unique(bowhead_LT[, c("Region.Label", 
                                       "Sample.Label", 
                                       "Effort")])
-
 # Object, region and sample labels
 observation_table <- unique(bowhead_LT[, c("object", 
                                            "Region.Label", 
                                            "Sample.Label")])
-
 # Finding the abundance and CI
 abund_bio_hn <- dht(model = hn$ddf,
                     region_table, 
                     sample_table, 
                     observation_table)
-
-
 # Viewing the abundance and CI and getting the tables for plotting
-
 # Estimated Abundance of individuals
 N_ind <- abund_bio_hn$individuals$N 
 N_ind
-
 # Estimated Abundance of clusters
 N_clu <- abund_bio_hn$clusters$N 
 N_clu
-
 # Estimated density of individuals 
 d_ind <- abund_bio_hn$individuals$D
 d_ind 
-
 # Estimated density of clusters
 d_clu <- abund_bio_hn$clusters$D
 d_clu
-
 # Average probability of detection for individuals
 abund_bio_hn$individuals$average.p 
-
 # Average probability of detection for clusters
 abund_bio_hn$clusters$average.p 
-
 ```
 \
 ```{r Results Graphs, echo=TRUE, eval=FALSE}
 ##### GRAPHS FOR RESULTS #####
-
 ## INDIVIDUALS ##
 # Changing the Region label to a factor
     # This allows it to be plotted in a desired order
@@ -631,7 +558,6 @@ N_ind <- N_ind %>%
   mutate(Label = factor(Label, levels = c("2", "3", "9", 
                                        "11", "12", "15",
                                        "Total"))) 
-
 # Plotting estimates abundance data 
 ggplot(N_ind) +
   geom_point(aes(x = Label, y = Estimate), 
@@ -658,9 +584,6 @@ ggplot(N_ind) +
                                         by = 100))) +
   # Title for easy distingishing
   labs(title = "Individual Abundance")
-
-
-
 # Plotting individual estimated density data 
 d_ind <- d_ind %>%
   mutate(Label = factor(Label, levels = c("2", "3", "9", 
@@ -687,18 +610,13 @@ ggplot(d_ind) +
   
   # Title to distinguish graphs
   labs(title = "Individual Density")
-
-
-
 ## CLUSTERS ##
-
 # Changing the Region label to a factor
 # This allows it to be plotted in a desired order
 N_clu <- N_clu %>%
   mutate(Label = factor(Label, levels = c("2", "3", "9", 
                                        "11", "12", "15",
                                        "Total")))
-
 # Plotting estimated abundance data 
 ggplot(N_clu) +
   geom_point(aes(x = Label, y = Estimate), 
@@ -725,8 +643,6 @@ ggplot(N_clu) +
                                         by = 100))) +
   # Title for distingusing graphs
   labs(title = "Cluster Abundance")
-
-
 d_clu <- d_clu %>%
   mutate(Label = factor(Label, levels = c("2", "3", "9", 
                                        "11", "12", "15",
@@ -754,7 +670,6 @@ ggplot(bowhead_LT) +
   
   # title to distinguish graphs
   labs(title = "Cluster Density")
-
 ```
 
 ```{r Results Table, echo=TRUE, eval=FALSE}
@@ -764,20 +679,12 @@ abundance_table_ind <- N_ind[, c(1:2, 5:6)]
 abundance_table_ind <- round(abundance_table_ind[, 2:4], 2)
 # Rename columns
 colnames(abundance_table_ind) <- c("Estimate", "Lower CI", "Upper Cl")
-
 # Do the same with cluster table
 abundance_table_clu <- N_ind[, c(1:2, 5:6)]
 # Round to 2 decimal places
 abundance_table_clu <- round(abundance_table_clu[, 2:4], 2)
 # Rename columns
 colnames(abundance_table_clu) <- c("Estimate", "Lower CI", "Upper Cl")
-
 # Merge tables with an empty column between them
 abundance_table <- cbind(abundance_table_ind, "", abundance_table_clu)
 ```
-
-
-
-
-
-
