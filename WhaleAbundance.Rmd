@@ -26,7 +26,7 @@ We have evenly spread the work, if someone was struggling with a part, another p
 
 ```{r Libraries and Logo, fig.align="center", message=FALSE, echo = FALSE, warning=FALSE, echox=FALSE, out.width="0.47\\linewidth"}
 library(knitr)
-include_graphics("Subject.jpg")
+include_graphics("Subject.png")
 include_graphics("logo.png")
 ```
 
