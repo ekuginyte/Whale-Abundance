@@ -8,7 +8,11 @@ geometry: margin=1.5cm
 fontsize: 11pt
 ---
 
-
+```{r Libraries and Logo, fig.align="center", message=FALSE, echo = FALSE, warning=FALSE, echox=FALSE, out.width="0.47\\linewidth"}
+library(knitr)
+include_graphics("Subject.png")
+include_graphics("logo.png")
+```
 \
 Students: 220024321, 180015716, 220013309
 \
@@ -24,101 +28,68 @@ We have evenly spread the work, if someone was struggling with a part, another p
 \
 \
 
-```{r Libraries and Logo, fig.align="center", message=FALSE, echo = FALSE, warning=FALSE, echox=FALSE, out.width="0.47\\linewidth"}
-library(knitr)
-include_graphics("Subject.png")
-include_graphics("logo.png")
-```
-
 \newpage 
 
 ### Abstract
-
-\
-The study focuses on the population of bowhead whales in West Greenland, an area with history of exploitative whaling practise. The aim of the study is to estimate and analyse the bowhead whale and their group abundance using conventional distance sampling. A model using a half-normal detection function with no adjustments was selected. It estimated the probability of detection of individual bowhead whales to be 
+The study focuses on the population of bowhead whales in West Greenland, an area with history of exploitative whaling practise (). The aim of the study is to estimate and analyse the bowhead whale and their group abundance using conventional distance sampling. A model using a half-normal detection function with no adjustments was selected. The estimated probability of detecting individual bowhead whales was 0.47 and detecting clusters was 0.61. Total estimated abundance was 228.82 (95% CI = 122.00; 429.14) for individuals and for clusters 183.93 ( 95% CI = 94.62; 357.54). These estimates are small compared to previous estimates from Heide-Jørgensen et al. (2007) and Wiig et al. (2011) which could suggest a lack of sufficient data to make robust estimates. Additionally as all assumptions of distance sampling are met therefore there is no concerns over the model.
 
 ### Introduction
-
-\
 Accurate estimation of animal populations is essential for wildlife management and conservation, as it helps to determine population numbers, monitor trends, and evaluate the effectiveness of conservation efforts (Elton, 1950; Bourlière, 1954). Animal populations are affected by various factors such as demographic, ecological, and human-related factors. Bowhead whales were commercially hunted in the early 16th century, leading to a drastic reduction in their population by the end of the 19th century. This led to research on their population and abundance in West Greenland, an area where their behaviour and activities are reliable indicators of population size and structure. One such area is Disko Bay, which has seasonal occurrences of bowhead whales. The International League of Nations agreed on worldwide protection of the species in 1931 to ensure their survival, and monitoring the abundance of their populations has remained crucial for their conservation today (Heide-Jørgensen,M.P. et al., 2007; Barkham, 1979; Woodby & Botkin, 1993; Rekdal et al., 2015).
 
-```{r Survey Map, echo=FALSE, fig.align="center", out.width="0.55\\linewidth"}
+```{r Survey Map, echo=FALSE, fig.align="center", out.width="0.50\\linewidth"}
 # Include Map
 library(htmltools)
 include_graphics("image.png")
 # Include title
-#(A) Strata map, (B) The planned transects (red) and surveyed transect lines (blue) and (C) the #sightings of groups of bowhead whales (including uncertain and sightings with missing angle #measurements) in West Greenland during aerial surveys in March–April 2012 (Rekdal et al., 2015)
 ```
+Figure 1:  (A) Strata map, (B) The planned transects (red) and surveyed transect lines (blue) and (C) the sightings of groups of bowhead whales (including uncertain and sightings with missing angle measurements) in West Greenland during aerial surveys in March–April 2012 (Rekdal et al., 2015)
+\
 
 This study assesses the detectability and abundance of bowhead whales in Disko Bay using distance data from the survey conducted by Rekdal et al. (2015). Based on the aerial survey, the number of bowhead whales in Disko Bay in 2006 was estimated to be 1,229 (CV = 0.47, 95% CI: 495-2,939) (Heide-Jrgensen et al. 2007). In this report, a sample representative portion of the area, i.e. plot distance sampling, is used to estimate the abundance. This methodology is widely used in ecological surveys to account for imperfect detections. 
 
-### Methods
+\newpage 
 
+### Methods
+**Data Collection**
 \
 To collect data on bowhead whales, visual aerial line-transect surveys were conducted in coast land offshore areas in West Greenland between 65°400N and 75°300N, largely covering the area of the local spring aggregation in Disko Bay (Rekdal et al., 2015). The study region of 242,650km^2 was divided into 16 strata based on prior knowledge of anticipated densities of bowhead whales. Between 24th March and 14th April 2012 7836.5km of total east-west oriented transect lines were observed, with the targeted altitude and speed being 213m and 167 km/h respectively, the maximum perpendicular distance was set to 2,500m. Surveying was only carried out if Beaufort Sea States Code was 2 or less, i.e. only when the sea was calm. Inclinometers were used to measure the angle of declination for each observed group of bowhead whales (Suunto). Due to an obscured view close to the transect line, detections were left-truncated at 100m (Rekdal et al., 2015). 
 \
-The bowhead whales further away are less likely to be detected, thus distance is employed as a detection bias. The detection function in distance sampling describes how detectability varies with distance, it includes the proportion and probability of animals being seen at a given distance.
-\
-8 models were fit to the distance data using all combinations of hazard-rate $g(x) = \exp(-(x / \sigma)^{-b})$, and half-normal $g(x) = \exp(-x^2 / 2\sigma^2)$ detection functions with cosine, hermite polynomial and simple polynomial adjustments. These functions use $\sigma$ as a scale parameter (“standard deviation”) and $b$ is used in hazard-rate functions to control the width of the shoulder. 
-\
-Model selection using Akaike information criterion (AIC) found that the best model was a half-normal with no adjustments. AICc was also applied due to the ratio of model parameters to observation being less than 1:40 and found the same result (Takezawa, 2014). This model had a good fit; Cramer-von Mises test (T = 0.073, p = 0.732), bootstrap Kolmogorov-Smirnov test for goodness-of-fit (D = 0.073, p = 1). Additionally, a QQ plot comparing empirical and fitted CDF had points lying approximately on the 1:1 line. 
 
-```{r Model Fit Plot, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, out.width="0.60\\linewidth", fig.align="center"}
+**Data Analysis**
+\
+The bowhead whales further away are less likely to be detected, thus distance is employed as a detection bias. The detection function in distance sampling describes how detectability varies with distance, it includes the proportion and probability of animals being seen at a given distance. 8 models were fit to the distance data using all combinations of hazard-rate $g(x) = \exp(-(x / \sigma)^{-b})$, and half-normal $g(x) = \exp(-x^2 / 2\sigma^2)$ detection functions with cosine, hermite polynomial and simple polynomial adjustments. These functions use $\sigma$ as a scale parameter (“standard deviation”) and $b$ is used in hazard-rate functions to control the width of the shoulder. Model selection using Akaike information criterion (AIC) chose half-normal with no adjustments as the best model. AICc was also applied due to the ratio of model parameters to observations being less than 1:40 and found the same result (Takezawa, 2014). This model had a good fit; Cramer-von Mises test (T = 0.073, p = 0.732), bootstrap Kolmogorov-Smirnov test for goodness-of-fit (D = 0.073, p = 1). Additionally, a QQ plot comparing empirical and fitted CDF had points lying approximately on the 1:1 line. 
+\
+
+### Results
+The model estimated the average detectability of **individual** bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see figure 2). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see figure 2). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see figure 2).
+\
+
+The model estimated the average detectability of **clusters** of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see figure 3) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see figure 3)
+\
+
+```{r Individual and Cluster Abundance Plots, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="45%"}
+library(janitor)
 #####    SETTING UP    #####
-# Getting Package Statsecol from github which contains the data
-remotes::install_github("https://github.com/chrissuthy/statsecol")
-# Loading in the data package
-library(statsecol)
-# Set up libraries 
+
+# Set up packages 
 library(Distance)
 library(tidyverse)
 library(remotes)
 library(MuMIn)
-# First fit the most basic model to explore it.
-# Distance model with half-normal key function, no adjustment.
+
+
+# Getting Package Statsecol from github which contains the data
+remotes::install_github("https://github.com/chrissuthy/statsecol")
+
+# Loading in the data package
+library(statsecol)
+
+
+# Half-normal with no adjustment 
 hn <- ds(data = bowhead_LT, 
-         # Half-normal
-         key = "hn", 
-         # No adjustment argument
-         adjustment = NULL) 
-# Setting plot size
-par(mfrow = c(1,2), mar = c(5.5, 4, 2, 2) + 0.1, oma = c(1, 1, 1, 1))
-# Plotting the detection function over the distances distribution
-plot(hn, 
-     which = 2, 
-     pl.col = adjustcolor("seagreen", 0.5), 
-     border = NULL,
-     ylab = "Detection probability (g(x))", 
-     xlab = "Distance", 
-     main = "A",
-     lwd = 1.4,
-     bg = alpha("darkgoldenrod2", 0.3),
-     pch = 21)
-# Plotting and running the Cramer-von Mises test
-gof_ds(hn, 
-       main = "B",
-       lwd = 1.4,
-       pch = 21,
-       col = "darkgoldenrod4",
-       bg = alpha("darkgoldenrod2", 0.3))
-# Create the labels for figures
-subtitle = ("Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution \nof distances. B is the QQ-plot of the expected vs observed CDF")
-# Print out the labels for figures
-mtext(side = 1, adj = 0, cex = 0.7, subtitle, outer = TRUE)
-``` 
-Figure 2: Half-Normal No Adjustment Model Fit. A is the model fit over the distribution of distances. B is the QQ-plot of the expected vs observed CDF
-\
+         key = 'hn', 
+         adjustment = NULL ) 
 
-### Results
-\
-**Individuals**
-\
-The model estimated the average detectability of **individual** bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see figure 2). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see figure 2). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see figure 2).
-\
-The model estimated the average detectability of **clusters** of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see figure 3) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see figure 3)
-
-```{r Individual and Cluster Abundance Plots, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="50%"}
-library(janitor)
 # Making the data 
 region_table <- unique(bowhead_LT[, c("Region.Label", 
                                       "Area")])
@@ -135,6 +106,7 @@ abund_bio_hn <- dht(model = hn$ddf,
                     region_table, 
                     sample_table, 
                     observation_table)
+
 # Viewing the abundance and CI and getting the tables for plotting
 # Estimated Abundance of individuals
 N_ind <- abund_bio_hn$individuals$N 
@@ -172,7 +144,6 @@ ggplot() +
   # Addding labels for axis and figure legend
   xlab("Survey Strata") +
   ylab("Estimated Abundance") +
-  labs(caption = "Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dots), the observed \n individual abundance in each strata (black dots) and the confidence intervals for the abundance estimates (blue) lines") +
   
   # Increase size of text
   theme(plot.caption = element_text(hjust = 0, size = 11)) +
@@ -231,7 +202,6 @@ ggplot() +
   # Adding labels for axis and figure legend
   xlab("Survey Strata") +
   ylab("Estimated Abundance") +
-  labs(caption = "Figure 3: The estimated abundance of Bowhead whale clusters in each strata (green dots), the observed \n cluster abundance in each strata (black dots) and the confidence intervals for the abundance estimates (green) lines") +
   
   # Increase size of text
   theme(plot.caption = element_text(hjust = 0, size = 11)) +
@@ -246,7 +216,11 @@ ggplot() +
   labs(title = "Clusters")
 ```
 \
-```{r Table with Results, echo = FALSE, results="asis", message=FALSE, error=FALSE}
+
+Figure 3: Individuals: Estimated abundance of individuals in each strata (blue dots),  the 95% confidence intervals for estimates (blue) lines and the observed individual abundance (black dots). Clusters: Estimated abundance of clusters in each strata (blue dots), 95% confidence intervals for estimates (blue lines) and the observed cluster abundance in each strata (black dots) 
+\
+
+```{r Table with Results, echo = FALSE, results="asis", message=FALSE, error=FALSE, out.width="0.45\\linewidth"}
 # Results table for individuals
 abundance_table_ind <- N_ind[, c(1:2, 5:6)]
 # Round to 2 decimal places
@@ -263,40 +237,44 @@ colnames(abundance_table_clu) <- c("Cluster Abundance Estimates", "Lower CI", "U
 #kable(abundance_table_ind, caption = "Abundance Estimates for Individuals")
 #kable(abundance_table_clu, caption = "Abundance Estimates for Clusters")
 # Merge tables with an empty column between them
-abundance_table <- cbind(abundance_table_ind, "", abundance_table_clu)
+abundance_table <- cbind(abundance_table_ind, abundance_table_clu)
 # Print the table
 kable(abundance_table, caption = "Abundance Estimates for Individuals, Abundance Estimates for Clusters")
 ```
 
-### Discussion
+## Discussion
+The study found that the total individual bowhead whale estimate to be 228.82 (CI: 122.00; 429.14). This is a much smaller estimate compared to estimates by Heide-Jørgensen et al. (2007) that found 1,229 individuals (95% CI: 495; 2,939) in 2006 and Wiig et al. (2011) that found 410 individuals (95% CI: 783; 2,038) from 2000–2010. This could suggest that there has been a decline in the Bowhead whale population in Disko Bay. Alternatively it could suggest that the survey done by Rekdal et al., (2015) was not sufficient enough to gain a robust estimate of abundance. Further studies of the Bowhead Whale population may be required to gain more accurate estimates of abundance. Additionally here is a large amount of error in the estimates shown in the large confidence intervals. This is likely due to the small number of detections of whales in each stratum. Therefore this gives more evidence that the survey data could not be sufficient to make robust estimated of abundance. 
 
-\
-The estimated abundances suggest there are most individual and clusters of Bowhead whales in stratum 2 however there is a large amount of error visible in the large confidence intervals. This is most likely due to the small number of detections of whales in each stratum for example in strata 9,11,12 and 15 only one sighting was recorded. Therefore to get more accurate measurements of Bowhead whale abundance, a second survey should be conducted over the same region. 
-The perpendicular distance distribution of detections revealed a slight reduction in detection frequency close to the transect line, implying a somewhat obscured view, which would result in underprediction. Detections were, therefore, left-truncated at 100 m, satisfying the assumption of perfect detection at this distance. As inclinometers were used to measure the angle of declination, perpendicular distances from line to animal are uniform random variables. Distances have been measured using targeted plane altitude and speed, indicating that the survey was completed with great care and that it was accurately measured to the initial plane location. As of the data surveying description, it is concluded that the assumptions have been satisfied.
-
-For future studies, surveys could be collected over years and compared as time series data to inspect if there are changes in the abundance. 
+The estimates should be robust in terms of the model as the the assumptions of distance sampling were met. The perpendicular distance distribution of detections revealed a slight reduction in detection frequency close to the transect line, implying a somewhat obscured view, which would result in underprediction. Detections were, therefore, left-truncated at 100 m, satisfying the assumption of perfect detection at this distance. As inclinometers were used to measure the angle of declination, perpendicular distances from line to animal are uniform random variables. Distances have been measured using targeted plane altitude and speed, indicating that the survey was completed with great care and that it was accurately measured to the initial plane location. As of the data surveying description, it is concluded that the assumptions have been satisfied.
 
 \
 
-### References
+## References
+Barkham, S. H. (1984). The Basque Whaling Establishments in Labrador 1536-1632 - A Summary. ARCTIC, 37(4). https://doi.org/10.14430/arctic2232
 \
 
- BARKHAM, (no date) The Basque Whaling Establishments .in Labrador, View of the Basque whaling establishments in Labrador 1536-1632 - a summary. Available at: https://journalhosting.ucalgary.ca/index.php/arctic/article/view/65284/49198 (Accessed: February 14, 2023). 
-
-Bockstoce , J.R. and Burns , J.J. (no date) Commercial whaling in the North Pacific Sector - Daniel B. Botkin. Available at: https://www.danielbbotkin.com/wp-content/uploads/2013/12/Bockstoce_and_Burns_1993.pdf (Accessed: February 14, 2023)
-
-Heide-Jørgensen, M.P. et al. (no date) Increasing abundance of bowhead whales in West Greenland. Available at: https://royalsocietypublishing.org/doi/10.1098/rsbl.2007.0310 (Accessed: February 14, 2023). 
-
-Miller, D.L., Rexstad, E.A. and Thomas, L. (no date) “Spatial models for distance sampling data: recent developments and future directions. https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.12105,” in L.M. Burt (ed.) Methods in Ecology and Evolution. 11th edn
-
-Rekdal, S.L. et al. (2014) “Trends in bowhead whales in West Greenland: Aerial surveysvs. genetic capture-recapture analyses,” Marine Mammal Science, 31(1), pp. 133–154. Available at: https://doi.org/10.1111/mms.12150. 
-
-Takezawa, K. (no date) Learning regression analysis by Simulation, SpringerLink. Springer Japan. Available at: https://link.springer.com/book/10.1007/978-4-431-54321-3 (Accessed: February 16, 2023). 
-
-Woodby, D.A. (no date) Stock sizes prior to commercial whaling - Daniel B. Botkin. Available at: https://www.danielbbotkin.com/wp-content/uploads/2013/12/Stock_Sizes_Bowheads.pdf (Accessed: February 14, 2023)
+Bockstoce, J. R., & Burns, J. J. (1993). Commercial Whaling in the North Pacific Sector. In The Bowhead Whale. Society for Marine Mammalogy.
 \
 
-### Appendix
+Heide-Jørgensen, M. P., Laidre, K., Borchers, D., Samarra, F., & Stern, H. (2007). Increasing abundance of bowhead whales in West Greenland. Biology Letters, 3(5), 577–580. https://doi.org/10.1098/rsbl.2007.0310
+\
+
+Miller, D. L., Burt, M. L., Rexstad, E. A., & Thomas, L. (2013). Spatial models for distance sampling data: recent developments and future directions. Methods in Ecology and Evolution, 4(11), 1001–1010. https://doi.org/10.1111/2041-210X.12105
+\
+
+Rekdal, S. L., Hansen, R. G., Borchers, D., Bachmann, L., Laidre, K. L., Wiig, Ø., Nielsen, N. H., Fossette, S., Tervo, O., & Heide-Jørgensen, M. P. (2015). Trends in bowhead whales in West Greenland: Aerial surveys vs . genetic capture-recapture analyses. Marine Mammal Science, 31(1), 133–154. https://doi.org/10.1111/mms.12150
+\
+
+Takezawa, K. (2014). Learning Regression Analysis by Simulation. Springer Japan. https://doi.org/10.1007/978-4-431-54321-3
+\
+
+Wiig, Ø., Heide-Jørgensen, M., Lindqvist, C., Laidre, K., Postma, L., Dueck, L., Palsbøll, P., & Bachmann, L. (2011). Recaptures of genotyped bowhead whales Balaena mysticetus in eastern Canada and West Greenland. Endangered Species Research, 14(3), 235–242. https://doi.org/10.3354/esr00365
+\
+
+Woodby, D. A., & Botkin, D. B. (1993). Stock Prices Prior to Commercial Whaling. In The Bowhead Whale. Society for Marine Mammalogy.
+\
+
+## Appendix
 
 R Analysis Code
 ```{r Setting up, echo=TRUE, eval=FALSE}
