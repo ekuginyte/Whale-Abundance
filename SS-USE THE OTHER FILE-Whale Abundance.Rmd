@@ -206,7 +206,7 @@ ggplot()+
   labs(title = "Individuals")
 
 ```
-Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dots), the observed individual abundance in each strata (black dots) and the confidence intervals for the abundance estimates (blue) lines')+
+Figure 3: The estimated abundance of Bowhead whale individuals in each strata (blue dots), the observed individual abundance in each strata (black dots) and the confidence intervals for the abundance estimates (blue) lines') +
 \
 
 

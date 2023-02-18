@@ -31,7 +31,7 @@ We have evenly spread the work, if someone was struggling with a part, another p
 \newpage 
 
 ### Abstract
-The study focuses on the population of bowhead whales in West Greenland, an area with history of exploitative whaling practise (). The aim of the study is to estimate and analyse the bowhead whale and their group abundance using conventional distance sampling. A model using a half-normal detection function with no adjustments was selected. The estimated probability of detecting individual bowhead whales was 0.47 and detecting clusters was 0.61. Total estimated abundance was 228.82 (95% CI = 122.00; 429.14) for individuals and for clusters 183.93 ( 95% CI = 94.62; 357.54). These estimates are small compared to previous estimates from Heide-Jørgensen et al. (2007) and Wiig et al. (2011) which could suggest a lack of sufficient data to make robust estimates. Additionally as all assumptions of distance sampling are met therefore there is no concerns over the model.
+The study focuses on the population of bowhead whales in West Greenland, an area with history of exploitative whaling practise (Rekdal et al., 2015). The aim of the study is to estimate and analyse the bowhead whale and their group abundance using conventional distance sampling. A model using a half-normal detection function with no adjustments was selected. The estimated probability of detecting individual bowhead whales was 0.47 and detecting clusters was 0.61. Total estimated abundance was 228.82 (95% CI = 122.00; 429.14) for individuals and for clusters 183.93 (95% CI = 94.62; 357.54). These estimates are small compared to previous estimates from Heide-Jørgensen et al. (2007) and Wiig et al. (2011) which could suggest a lack of sufficient data to make robust estimates. Additionally as all assumptions of distance sampling are met therefore there is no concerns over the model.
 
 ### Introduction
 Accurate estimation of animal populations is essential for wildlife management and conservation, as it helps to determine population numbers, monitor trends, and evaluate the effectiveness of conservation efforts (Elton, 1950; Bourlière, 1954). Animal populations are affected by various factors such as demographic, ecological, and human-related factors. Bowhead whales were commercially hunted in the early 16th century, leading to a drastic reduction in their population by the end of the 19th century. This led to research on their population and abundance in West Greenland, an area where their behaviour and activities are reliable indicators of population size and structure. One such area is Disko Bay, which has seasonal occurrences of bowhead whales. The International League of Nations agreed on worldwide protection of the species in 1931 to ensure their survival, and monitoring the abundance of their populations has remained crucial for their conservation today (Heide-Jørgensen,M.P. et al., 2007; Barkham, 1979; Woodby & Botkin, 1993; Rekdal et al., 2015).
@@ -61,10 +61,10 @@ The bowhead whales further away are less likely to be detected, thus distance is
 \
 
 ### Results
-The model estimated the average detectability of **individual** bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see figure 2). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see figure 2). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see figure 2).
+The model estimated the average detectability of **individual** bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see figure 2 and table 1). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see figure 2 and table 1). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see figure 2).
 \
 
-The model estimated the average detectability of **clusters** of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see figure 3) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see figure 3)
+The model estimated the average detectability of **clusters** of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see figure 3 and table 1) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see figure 3 and table 1).
 \
 
 ```{r Individual and Cluster Abundance Plots, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="45%"}
@@ -87,7 +87,7 @@ library(statsecol)
 
 # Half-normal with no adjustment 
 hn <- ds(data = bowhead_LT, 
-         key = 'hn', 
+         key = "hn", 
          adjustment = NULL ) 
 
 # Making the data 
@@ -246,7 +246,6 @@ kable(abundance_table, caption = "Abundance Estimates for Individuals, Abundance
 The study found that the total individual bowhead whale estimate to be 228.82 (CI: 122.00; 429.14). This is a much smaller estimate compared to estimates by Heide-Jørgensen et al. (2007) that found 1,229 individuals (95% CI: 495; 2,939) in 2006 and Wiig et al. (2011) that found 410 individuals (95% CI: 783; 2,038) from 2000–2010. This could suggest that there has been a decline in the Bowhead whale population in Disko Bay. Alternatively it could suggest that the survey done by Rekdal et al., (2015) was not sufficient enough to gain a robust estimate of abundance. Further studies of the Bowhead Whale population may be required to gain more accurate estimates of abundance. Additionally here is a large amount of error in the estimates shown in the large confidence intervals. This is likely due to the small number of detections of whales in each stratum. Therefore this gives more evidence that the survey data could not be sufficient to make robust estimated of abundance. 
 
 The estimates should be robust in terms of the model as the the assumptions of distance sampling were met. The perpendicular distance distribution of detections revealed a slight reduction in detection frequency close to the transect line, implying a somewhat obscured view, which would result in underprediction. Detections were, therefore, left-truncated at 100 m, satisfying the assumption of perfect detection at this distance. As inclinometers were used to measure the angle of declination, perpendicular distances from line to animal are uniform random variables. Distances have been measured using targeted plane altitude and speed, indicating that the survey was completed with great care and that it was accurately measured to the initial plane location. As of the data surveying description, it is concluded that the assumptions have been satisfied.
-
 \
 
 ## References
@@ -316,9 +315,9 @@ hist(bowhead_LT$distance,
 ```{r Modelling, echo=TRUE, eval=FALSE}
 #####     MODELLING     #####
 # Due to the long shoulder seen in the histogram, first fit a hazard rate;
-#   then fit a half-normal
-# Fitting hazard-rate detection functions with all adjustment terms 
-# Hazard-rate with no adjustment 
+#   then fit a half-normal.
+# Fitting hazard-rate detection functions with all adjustment terms.
+# Hazard-rate with no adjustment.
 hr <- ds(data = bowhead_LT, 
          key = "hr", 
          adjustment = NULL) 
@@ -334,8 +333,8 @@ hr_herm <- ds(data = bowhead_LT,
 hr_poly <- ds(data = bowhead_LT, 
               key = "hr", 
               adjustment = "poly") 
-# Fitting half-normal detection functions with all adjustment terms 
-# Half-normal with no adjustment 
+# Fitting half-normal detection functions with all adjustment terms. 
+# Half-normal with no adjustment.
 hn <- ds(data = bowhead_LT, 
          key = "hn", 
          adjustment = NULL) 
@@ -432,8 +431,8 @@ summarize_ds_models(hn, hn_cos, hn_herm, hn_poly,
                     output = "plain")
 # As the dataset is small, checking whether AICc is a more appropriate measure
 # To do this, Takezawa (2014) has said AICc should be used when the ratio of 
-# your parameters to number of data points is less than 1:40
-# Print summary of hazard-rate distance model
+# your parameters to number of data points is less than 1:40.
+# Print summary of hazard-rate distance model.
 summary(hr)
   # Parameters = 2 : Observations = 58
   # Therefore ratio is 1:29
@@ -453,8 +452,8 @@ AICc(hn, hn_cos, hn_herm, hn_poly,
 \
 ```{r Model Fit, echo=TRUE, eval=FALSE}
 #####     MODEL FIT     #####
-# Comparing the detection function to the cramer-von mises test
-# Setting plot size
+# Comparing the detection function to the cramer-von mises test.
+# Setting plot size.
 par(mfrow = c(1,2), 
     # Set margins
     mar = c(5, 4, 4, 2) + 0.1)
@@ -480,10 +479,10 @@ gof_ds(hn,
        ks = TRUE,
        col = "darkgoldenrod4")
   # The Cramer-von Mises test gives a test statistic of 0.0732325 and a p-value 
-  #   of 0.731882
+  #   of 0.731882.
   # The Kolomogorov-Smirnov test gives a test statistic stat of 0.0725551 and a             
-  #   p-value of 1
-# Therefore the model has a good fit as the p values are much more than 0.05
+  #   p-value of 1.
+# Therefore the model has a good fit as the p values are much more than 0.05.
 ```
 \
 ```{r Model Inference, echo=TRUE, eval=FALSE}
@@ -508,8 +507,8 @@ abund_bio_hn <- dht(model = hn$ddf,
                     region_table, 
                     sample_table, 
                     observation_table)
-# Viewing the abundance and CI and getting the tables for plotting
-# Estimated Abundance of individuals
+# Viewing the abundance and CI and getting the tables for plotting.
+# Estimated Abundance of individuals.
 N_ind <- abund_bio_hn$individuals$N 
 N_ind
 # Estimated Abundance of clusters
@@ -530,8 +529,8 @@ abund_bio_hn$clusters$average.p
 ```{r Results Graphs, echo=TRUE, eval=FALSE}
 ##### GRAPHS FOR RESULTS #####
 ## INDIVIDUALS ##
-# Changing the Region label to a factor
-    # This allows it to be plotted in a desired order
+# Changing the Region label to a factor.
+    # This allows it to be plotted in a desired order.
 N_ind <- N_ind %>%
   mutate(Label = factor(Label, levels = c("2", "3", "9", 
                                        "11", "12", "15",
