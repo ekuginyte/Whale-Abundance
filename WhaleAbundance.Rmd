@@ -4,7 +4,7 @@ author: "Group K"
 date: "`r Sys.Date()`"
 output: pdf_document
 highlight: tango
-geometry: margin=1.5cm
+geometry: margin=1.4cm
 fontsize: 11pt
 ---
 
@@ -61,10 +61,10 @@ The bowhead whales further away are less likely to be detected, thus distance is
 \
 
 ### Results
-The model estimated the average detectability of **individual** bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see figure 2 and table 1). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see figure 2 and table 1). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see figure 2).
+The model estimated the average detectability of **individual** bowhead whales to be 0.47. For individual Bowhead whales, the estimated abundance was highest in strata 2 (138.83, 95% CI = 291.53; 66.11) and lowest in strata 15 (5.12, 95% CI = 39.44; 0.67) (see fig. 2, table 1). The total estimated individual abundance was 228.82 (95% CI = 122.00; 429.14) (see fig. 2, table 1). Additionally strata 2 has the biggest difference in observed abundance compared to estimated abundance with 65 whales seen and 138.83 estimated (see fig. 2, table 1).
 \
 
-The model estimated the average detectability of **clusters** of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see figure 3 and table 1) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see figure 3 and table 1).
+The model estimated the average detectability of **clusters** of Bowhead whales to be 0.61. Bowhead whale clusters were estimated to have the highest abundance also in strata 2 (106.79, 95% CI = 49.53; 230.28) (see fig. 3, table 1) which also has the largest difference between observed and estimated abundance (50 - 106.79). The total estimated cluster abundance was 183.93  (95% CI = 94.62; 357.54) (see fig. 3, table 1).
 \
 
 ```{r Individual and Cluster Abundance Plots, echo = FALSE, warning = FALSE, results = "hide", message = FALSE, fig.show="hold", out.width="45%"}
